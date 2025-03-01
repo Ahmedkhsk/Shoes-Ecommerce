@@ -1,39 +1,62 @@
-﻿using System.Threading.Tasks;
-
-namespace Shoes_Ecommerce.Controllers
+﻿namespace Shoes_Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
         private UserManager<ApplicationUser> userManager;
+
         public AccountController(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
         }
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register(RegisterDTO Model)
+        [HttpPost("Register/{lan:alpha}")]
+        public async Task<IActionResult> Register(RegisterDTO Model, string lan)
         {
+          
             if (!ModelState.IsValid)
-                return BadRequest(new ApiResponse(false,"Invalid Request Data"));
+            {
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("InvalidRequest", lan)));
+            }
 
             var existUserName = await userManager.FindByNameAsync(Model.UserName);
-            if(existUserName != null)
-                return BadRequest(new ApiResponse(false, "UserName is already taken"));
+            if (existUserName != null)
+            {
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNameAlreadyExists", lan)));
+            }
 
-            var user = new ApplicationUser();
-            user.UserName = Model.UserName;
-            user.Email = Model.Email;
-            user.vervicationCode = new Random().Next(1000, 9999).ToString();
-            user.IsApprove = false;
+            try
+            {
+               
+                var existEmail = await userManager.FindByEmailAsync(Model.Email);
+                if (existEmail != null)
+                {
+                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("EmailAlreadyExists", lan)));
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("EmailAlreadyExists", lan)));
+            }
+
+            var user = new ApplicationUser
+            {
+                UserName = Model.UserName,
+                Email = Model.Email,
+                verificationCode = new Random().Next(1000, 9999).ToString(),
+                IsApprove = false
+            };
 
             var result = await userManager.CreateAsync(user, Model.Password);
 
             if (result.Succeeded)
-                return Ok(new ApiResponse(true, "User registered successfully.", user));
+                return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("RegistrationSuccess", lan), user));
+            
 
-            return BadRequest(new ApiResponse(false , "User registration failed."));
+            return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("RegistrationFailed", lan)));
         }
+
+
     }
 }

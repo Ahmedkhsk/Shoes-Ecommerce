@@ -12,7 +12,7 @@ using Shoes_Ecommerce.Models;
 namespace Shoes_Ecommerce.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250301124730_Add_Auth")]
+    [Migration("20250301162650_Add_Auth")]
     partial class Add_Auth
     {
         /// <inheritdoc />
@@ -216,11 +216,15 @@ namespace Shoes_Ecommerce.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("vervicationCode")
+                    b.Property<string>("verificationCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");

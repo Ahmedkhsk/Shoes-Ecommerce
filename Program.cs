@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Options;
-
 namespace Shoes_Ecommerce
 {
     public class Program
@@ -17,6 +15,9 @@ namespace Shoes_Ecommerce
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
             });
+
+
+
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
                 options => 
                 {
@@ -25,7 +26,7 @@ namespace Shoes_Ecommerce
                     options.Password.RequireLowercase = true;        
                     options.Password.RequireUppercase = true;        
                     options.Password.RequiredLength = 6;
-
+                    options.User.RequireUniqueEmail = true;
                 }                
                 ).AddEntityFrameworkStores<Context>();
             

@@ -3,7 +3,7 @@
     public class ApplicationUser : IdentityUser
     {
         public string? Address { get; set; }
-        public string vervicationCode { get; set; } = generateVervicationCode();
+        public string verificationCode { get; set; } = generateVervicationCode();
         public bool IsApprove { get; set; }
 
         static string generateVervicationCode ()
