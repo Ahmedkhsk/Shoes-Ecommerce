@@ -12,8 +12,8 @@ using Shoes_Ecommerce.Models;
 namespace Shoes_Ecommerce.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250228213455_Add_DB_Auth")]
-    partial class Add_DB_Auth
+    [Migration("20250301124730_Add_Auth")]
+    partial class Add_Auth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,7 +166,7 @@ namespace Shoes_Ecommerce.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Addresse")
+                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -178,6 +178,9 @@ namespace Shoes_Ecommerce.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApprove")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -212,6 +215,10 @@ namespace Shoes_Ecommerce.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("vervicationCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

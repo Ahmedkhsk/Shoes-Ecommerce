@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+
 namespace Shoes_Ecommerce
 {
     public class Program
@@ -15,7 +17,17 @@ namespace Shoes_Ecommerce
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
             });
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<Context>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
+                options => 
+                {
+                    options.Password.RequireNonAlphanumeric = false; 
+                    options.Password.RequireDigit = true;            
+                    options.Password.RequireLowercase = true;        
+                    options.Password.RequireUppercase = true;        
+                    options.Password.RequiredLength = 6;
+
+                }                
+                ).AddEntityFrameworkStores<Context>();
             
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

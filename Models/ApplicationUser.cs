@@ -2,9 +2,9 @@
 {
     public class ApplicationUser : IdentityUser
     {
-        public string? Addresse { get; set; }
+        public string? Address { get; set; }
         public string vervicationCode { get; set; } = generateVervicationCode();
-        public bool MyProperty { get; set; }
+        public bool IsApprove { get; set; }
 
         static string generateVervicationCode ()
         {
