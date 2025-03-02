@@ -28,6 +28,16 @@
             {
                 ["en"] = "User registration failed.",
                 ["ar"] = "فشل تسجيل المستخدم."
+            },
+            ["VerificationSuccess"] = new()
+            {
+                ["en"] = "User Verification Successfully.",
+                ["ar"] = "تم التحقق من المستخدم بنجاح."
+            },
+            ["VerificationFailed"] = new()
+            {
+                ["en"] = "User Verification Failed.",
+                ["ar"] = "فشل التحقق من المستخدم."
             }
         };
 
