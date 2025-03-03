@@ -6,3 +6,5 @@ global using Shoes_Ecommerce.DTO;
 global using Microsoft.AspNetCore.Mvc;
 global using System.ComponentModel.DataAnnotations;
 global using Shoes_Ecommerce.Helpers;
+global using System.Net.Mail;
+global using System.Net;

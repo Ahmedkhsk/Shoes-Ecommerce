@@ -53,7 +53,12 @@ namespace Shoes_Ecommerce.Controllers
             var result = await userManager.CreateAsync(user, Model.Password);
 
             if (result.Succeeded)
+            {
+                var emailSender = new EmailSenderHelper();
+                await emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your OTP is: <b>{user.verificationCode}</b>");
                 return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("RegistrationSuccess", lan), user));
+            }
+                
             
 
             return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("RegistrationFailed", lan)));
@@ -69,6 +74,8 @@ namespace Shoes_Ecommerce.Controllers
                 if(UserExist.verificationCode == Model.VerificationCode)
                 {
                     UserExist.IsApprove = true;
+                    UserExist.verificationCode = null;
+                    await userManager.UpdateAsync(UserExist);
                     return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("VerificationSuccess", lan)));
                 }                               
                 else
