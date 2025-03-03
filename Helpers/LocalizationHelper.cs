@@ -38,6 +38,31 @@
             {
                 ["en"] = "User Verification Failed.",
                 ["ar"] = "فشل التحقق من المستخدم."
+            },
+            ["OTPSend"] = new()
+            {
+                ["en"] = "The OTP code has been sent.",
+                ["ar"] = "تم إرسال رمز التحقق"
+            },
+            ["ChangePassSuccess"] = new()
+            {
+                ["en"] = "The password has been changed successfully.",
+                ["ar"] = "تم تغيير كلمة المرور بنجاح."
+            },
+            ["PassFailed"] = new()
+            {
+                ["en"] = "The password Failed.",
+                ["ar"] = "خطا في كلمه المرور."
+            },
+            ["UserNotFound"] = new()
+            {
+                ["en"] = "User not found.",
+                ["ar"] = "لم يتم العثور على المستخدم."
+            },
+            ["PassMismatch"] = new()
+            {
+                ["en"] = "New password and confirm password do not match.",
+                ["ar"] = "كلمة المرور الجديدة وتأكيد كلمة المرور غير متطابقين."
             }
         };
 

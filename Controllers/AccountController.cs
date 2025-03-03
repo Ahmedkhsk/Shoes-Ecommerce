@@ -13,7 +13,7 @@ namespace Shoes_Ecommerce.Controllers
             this.userManager = userManager;
         }
 
-        [HttpPost("Register/{lan:alpha}")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDTO Model, string lan = "en")
         {
           
@@ -65,7 +65,7 @@ namespace Shoes_Ecommerce.Controllers
         }
 
 
-        [HttpPost("VerificationEmail/{lan:alpha}")]
+        [HttpPost("VerificationEmail")]
         public async Task<IActionResult> verificationCode(VerificationEmailDTO Model,string lan = "en")
         {
             var UserExist = await userManager.FindByEmailAsync(Model.Email);
@@ -79,9 +79,63 @@ namespace Shoes_Ecommerce.Controllers
                     return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("VerificationSuccess", lan)));
                 }                               
                 else
-                    return Ok(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("VerificationFailed", lan)));
+                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("VerificationFailed", lan)));
             else
-                return Ok(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("VerificationFailed", lan)));
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNotFound", lan)));
+        }
+
+        [HttpPost("ForgatPassword")]
+        public async Task<IActionResult> forgatPassword([FromBody] string email , string lan = "en")
+        {
+            var userExist = await userManager.FindByEmailAsync(email);
+            if(userExist != null)
+            {
+                userExist.verificationCode = new Random().Next(1000, 9999).ToString();
+                userExist.IsApprove = false;
+                await userManager.UpdateAsync(userExist);
+                var emailSender = new EmailSenderHelper();
+                await emailSender.SendEmailAsync(email, "Verification Code", $"Your OTP is: <b>{userExist.verificationCode}</b>");
+                return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("OTPSend", lan)));
+            }
+
+            return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNotFound", lan)));
+        }
+        
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(changePassDTO Model, string lan = "en")
+        {
+            var userExist = await userManager.FindByEmailAsync(Model.Email);
+
+            if (userExist != null)
+            {
+                if (Model.newPassword == Model.confirmPassword)
+                {
+                    var result = await userManager.ChangePasswordAsync(userExist, userExist.PasswordHash, Model.newPassword);
+
+                    if (result.Succeeded)
+                    {
+                        userExist.IsApprove = true;
+                        userExist.verificationCode = null;
+
+                        await userManager.UpdateAsync(userExist);
+
+                        return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ChangePassSuccess", lan)));
+                    }
+                    else
+                    {
+                        var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                        return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("PassFailed", lan) + ": " + errors));
+                    }
+                }
+                else
+                {
+                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("PassMismatch", lan)));
+                }
+            }
+            else
+            {
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNotFound", lan)));
+            }
         }
     }
 }
