@@ -1,14 +1,23 @@
-﻿namespace Shoes_Ecommerce.Controllers
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Shoes_Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
         private UserManager<ApplicationUser> userManager;
+        private readonly IConfiguration configure;
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+        public AccountController(UserManager<ApplicationUser> userManager , IConfiguration configure)
         {
             this.userManager = userManager;
+            this.configure = configure;
         }
 
         [HttpPost("Register")]
@@ -106,41 +115,73 @@
 
             if (userExist != null)
             {
-                bool isOldPasswordCorrect = await userManager.CheckPasswordAsync(userExist, Model.oldPassword);
-                if (!isOldPasswordCorrect)
-                {
-                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("IncorrectOldPass", lan)));
-                }
-
                 if (Model.newPassword == Model.confirmPassword)
                 {
-                    var result = await userManager.ChangePasswordAsync(userExist, Model.oldPassword, Model.newPassword);
-
-                    if (result.Succeeded)
+                    if(Model.VerificationCode == userExist.verificationCode)
                     {
-                        userExist.IsApprove = true;
-                        userExist.verificationCode = null;
+                        var resetToken = await userManager.GeneratePasswordResetTokenAsync(userExist);
+                        var result = await userManager.ResetPasswordAsync(userExist, resetToken, Model.newPassword);
 
-                        await userManager.UpdateAsync(userExist);
+                        if (result.Succeeded)
+                        {
+                            userExist.IsApprove = true;
+                            userExist.verificationCode = null;
 
-                        return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ChangePassSuccess", lan)));
+                            await userManager.UpdateAsync(userExist);
+
+                            return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ChangePassSuccess", lan)));
+                        }
+                        else
+                        {
+                            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                            return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("PassFailed", lan) + ": " + errors));
+                        }
                     }
-                    else
-                    {
-                        var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                        return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("PassFailed", lan) + ": " + errors));
-                    }
+                    else 
+                        return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("VerificationFailed", lan)));
                 }
-                else
-                {
-                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("PassMismatch", lan)));
-                }
+                else            
+                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("PassMismatch", lan)));               
             }
-            else
-            {
+            else            
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNotFound", lan)));
-            }
+            
         }
 
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginDTO Model,string lan = "en")
+        {
+            var userExist = await userManager.FindByEmailAsync(Model.Email);
+            if(userExist != null)
+            {
+                var CheckPass = await userManager.CheckPasswordAsync(userExist, Model.password);
+                if (CheckPass)
+                {
+                    List<Claim> Claims = new List<Claim>();
+                    Claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                    Claims.Add(new Claim(ClaimTypes.NameIdentifier,userExist.Id));
+
+                    var userRole = await userManager.GetRolesAsync(userExist);
+                    
+                    foreach (var item in userRole)
+                        Claims.Add(new Claim(ClaimTypes.Role, item));
+                    var signKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configure["JWT:SecritKey"]));
+                    SigningCredentials signingCredentials = new SigningCredentials(signKey,SecurityAlgorithms.HmacSha256);
+                    JwtSecurityToken mytoken = new JwtSecurityToken(
+                        issuer: configure["JWT:IssuerIP"],
+                        audience: configure["JWT:AudienceIP"],
+                        expires: DateTime.Now.AddHours(1),
+                        claims: Claims,
+                        signingCredentials: signingCredentials
+                        );
+                    var token = new JwtSecurityTokenHandler().WriteToken(mytoken);
+                    return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("LoginSucces", lan), token));
+                }
+                else
+                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("LoginFaild", lan)));
+            }
+
+            return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("LoginFaild", lan)));
+        }
     }
 }

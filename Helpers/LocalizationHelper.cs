@@ -36,8 +36,8 @@
             },
             ["VerificationFailed"] = new()
             {
-                ["en"] = "User Verification Failed.",
-                ["ar"] = "فشل التحقق من المستخدم."
+                ["en"] = "Verification Code is Wrong.",
+                ["ar"] = "رمز التحقق خاطئ."
             },
             ["OTPSend"] = new()
             {
@@ -68,6 +68,16 @@
             {
                 ["en"] = "Old password is Incorrect.",
                 ["ar"] = "كلمة السر القديمة غير صحيحة."
+            },
+            ["LoginSucces"] = new()
+            {
+                ["en"] = "User logged in successfully.",
+                ["ar"] = "تم تسجيل دخول المستخدم بنجاح."
+            },
+            ["LoginFaild"] = new()
+            {
+                ["en"] = "Email or Password Invalid.",
+                ["ar"] = "الايميل او الباسورد خطا."
             }
         };
 

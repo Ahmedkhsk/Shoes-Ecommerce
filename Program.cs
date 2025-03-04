@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 namespace Shoes_Ecommerce
 {
     public class Program
@@ -28,8 +32,45 @@ namespace Shoes_Ecommerce
                     options.Password.RequiredLength = 6;
                     options.User.RequireUniqueEmail = true;
                 }                
-                ).AddEntityFrameworkStores<Context>();
-            
+                ).AddEntityFrameworkStores<Context>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
+                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+            });
+
+            builder.Services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(
+            option =>
+            {        
+                option.SaveToken = true;
+                option.RequireHttpsMetadata = false;
+                option.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["JWT:IssuerIP"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWT:AudienceIP"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecritKey"])),
+                };
+            });
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("MyPolicy", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -42,6 +83,8 @@ namespace Shoes_Ecommerce
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("MyPolicy");
 
             app.UseHttpsRedirection();
 
