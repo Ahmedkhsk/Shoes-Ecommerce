@@ -48,7 +48,7 @@ namespace Shoes_Ecommerce
                 option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(
             option =>
-            {        
+            {        // comment
                 option.SaveToken = true;
                 option.RequireHttpsMetadata = false;
                 option.TokenValidationParameters = new TokenValidationParameters()
