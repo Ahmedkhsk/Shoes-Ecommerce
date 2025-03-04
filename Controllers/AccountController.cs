@@ -56,7 +56,7 @@
             {
                 var emailSender = new EmailSenderHelper();
                 await emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your OTP is: <b>{user.verificationCode}</b>");
-                return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("RegistrationSuccess", lan), user));
+                return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("RegistrationSuccess", lan), Model));
             }
                 
             
@@ -125,7 +125,8 @@
                         }
                         else
                         {
-                            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                        var errorResult = result.Errors.Select(e => e.Description);
+                            var errors = string.Join(", ", errorResult);
                             return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("PassFailed", lan) + ": " + errors));
                         }                    
                 }

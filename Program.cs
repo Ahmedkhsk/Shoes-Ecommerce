@@ -25,12 +25,8 @@ namespace Shoes_Ecommerce
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
                 options => 
                 {
-                    options.Password.RequireNonAlphanumeric = false; 
-                    options.Password.RequireDigit = true;            
-                    options.Password.RequireLowercase = true;        
-                    options.Password.RequireUppercase = true;        
+                    options.Password.RequireNonAlphanumeric = false;      
                     options.Password.RequiredLength = 6;
-                    options.User.RequireUniqueEmail = true;
                 }                
                 ).AddEntityFrameworkStores<Context>()
                 .AddDefaultTokenProviders();
@@ -50,7 +46,6 @@ namespace Shoes_Ecommerce
             option =>
             {        
                 option.SaveToken = true;
-                option.RequireHttpsMetadata = false;
                 option.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
