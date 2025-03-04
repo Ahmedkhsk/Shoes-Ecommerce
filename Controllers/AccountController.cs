@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Shoes_Ecommerce.Controllers
+﻿namespace Shoes_Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -108,9 +106,15 @@ namespace Shoes_Ecommerce.Controllers
 
             if (userExist != null)
             {
+                bool isOldPasswordCorrect = await userManager.CheckPasswordAsync(userExist, Model.oldPassword);
+                if (!isOldPasswordCorrect)
+                {
+                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("IncorrectOldPass", lan)));
+                }
+
                 if (Model.newPassword == Model.confirmPassword)
                 {
-                    var result = await userManager.ChangePasswordAsync(userExist, userExist.PasswordHash, Model.newPassword);
+                    var result = await userManager.ChangePasswordAsync(userExist, Model.oldPassword, Model.newPassword);
 
                     if (result.Succeeded)
                     {
@@ -137,5 +141,6 @@ namespace Shoes_Ecommerce.Controllers
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNotFound", lan)));
             }
         }
+
     }
 }

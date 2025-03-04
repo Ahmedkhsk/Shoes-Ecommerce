@@ -63,6 +63,11 @@
             {
                 ["en"] = "New password and confirm password do not match.",
                 ["ar"] = "كلمة المرور الجديدة وتأكيد كلمة المرور غير متطابقين."
+            },
+            ["IncorrectOldPass"] = new()
+            {
+                ["en"] = "Old password is Incorrect.",
+                ["ar"] = "كلمة السر القديمة غير صحيحة."
             }
         };
 
