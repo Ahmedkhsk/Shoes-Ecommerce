@@ -110,8 +110,7 @@
             {
                 if (Model.newPassword == Model.confirmPassword)
                 {
-                    if(Model.VerificationCode == userExist.verificationCode)
-                    {
+               
                         var resetToken = await userManager.GeneratePasswordResetTokenAsync(userExist);
                         var result = await userManager.ResetPasswordAsync(userExist, resetToken, Model.newPassword);
 
@@ -128,10 +127,7 @@
                         {
                             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
                             return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("PassFailed", lan) + ": " + errors));
-                        }
-                    }
-                    else 
-                        return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("VerificationFailed", lan)));
+                        }                    
                 }
                 else            
                     return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("PassMismatch", lan)));               
