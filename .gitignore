@@ -1,0 +1,14 @@
+appsettings.json
+
+*.suo
+*.user
+*.vs/
+
+bin/
+obj/
+
+packages/
+
+*.runtimeconfig.dev.json
+
+*.bak
