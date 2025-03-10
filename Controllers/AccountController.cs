@@ -109,8 +109,7 @@
             if (userExist != null)
             {
                 if (Model.newPassword == Model.confirmPassword)
-                {
-               
+                {              
                         var resetToken = await userManager.GeneratePasswordResetTokenAsync(userExist);
                         var result = await userManager.ResetPasswordAsync(userExist, resetToken, Model.newPassword);
 
