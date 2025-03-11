@@ -69,12 +69,12 @@
                 ["en"] = "Old password is Incorrect.",
                 ["ar"] = "كلمة السر القديمة غير صحيحة."
             },
-            ["LoginSucces"] = new()
+            ["LoginSuccess"] = new()
             {
                 ["en"] = "User logged in successfully.",
                 ["ar"] = "تم تسجيل دخول المستخدم بنجاح."
             },
-            ["LoginFaild"] = new()
+            ["LoginFailed"] = new()
             {
                 ["en"] = "Email or Password Invalid.",
                 ["ar"] = "الايميل او الباسورد خطا."

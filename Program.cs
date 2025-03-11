@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Shoes_Ecommerce.Data;
-using System.Text;
-
 namespace Shoes_Ecommerce
 {
     public class Program

@@ -22,12 +22,6 @@
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("InvalidRequest", lan)));
             }
 
-            var existUserName = await userManager.FindByNameAsync(Model.UserName);
-            if (existUserName != null)
-            {
-                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNameAlreadyExists", lan)));
-            }
-
             try
             {
                
@@ -44,7 +38,7 @@
 
             var user = new ApplicationUser
             {
-                UserName = Model.UserName,
+                Name = Model.UserName,
                 Email = Model.Email,
                 verificationCode = new Random().Next(1000, 9999).ToString(),
                 IsApprove = false
@@ -84,8 +78,8 @@
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNotFound", lan)));
         }
 
-        [HttpPost("ForgatPassword")]
-        public async Task<IActionResult> forgatPassword([FromBody] string email , string lan = "en")
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> forgotPassword([FromBody] string email , string lan = "en")
         {
             var userExist = await userManager.FindByEmailAsync(email);
             if(userExist != null)
@@ -164,13 +158,13 @@
                         signingCredentials: signingCredentials
                         );
                     var token = new JwtSecurityTokenHandler().WriteToken(mytoken);
-                    return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("LoginSucces", lan), token));
+                    return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("LoginSuccess", lan), token));
                 }
                 else
-                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("LoginFaild", lan)));
+                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("LoginFailed", lan)));
             }
 
-            return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("LoginFaild", lan)));
+            return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("LoginFailed", lan)));
         }
     }
 }
