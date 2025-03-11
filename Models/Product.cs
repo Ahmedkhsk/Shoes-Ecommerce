@@ -10,13 +10,10 @@
         public double discount { get; set; }
         public string descriptionEn { get; set; } = string.Empty;
         public string descriptionAr { get; set; } = string.Empty;
-        public string sizeName { get; set; } = string.Empty;
-        public DateTime productDate { get; set; }
+        public DateTime productDate { get; set; } = DateTime.Now;
         public int productSellers { get; set; }
-        public ICollection<productSize> productSizes { get; set; } = new List<productSize>();
-        public ICollection<productImage> productImages { get; set; } = new List<productImage>();
-
-        [ForeignKey("Category"),Display(Name = "Category")]
+        public ICollection<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
         public int CategoryID { get; set; }
         public Category Category { get; set; } = default!;
     }

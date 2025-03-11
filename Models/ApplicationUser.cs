@@ -5,7 +5,7 @@
         public string? Address { get; set; }
         public string? verificationCode { get; set; } = default!;
         public bool IsApprove { get; set; }
-        public string ImageName { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
 
     }
 }

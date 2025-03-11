@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Shoes_Ecommerce.Data;
 using System.Text;
 
 namespace Shoes_Ecommerce
@@ -17,7 +18,8 @@ namespace Shoes_Ecommerce
 
             builder.Services.AddDbContext<Context>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DB")
+                );
             });
 
 
