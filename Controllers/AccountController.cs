@@ -38,7 +38,8 @@
 
             var user = new ApplicationUser
             {
-                Name = Model.UserName,
+                Name = Model.Name,
+                UserName = Model.Name+Guid.NewGuid(),
                 Email = Model.Email,
                 verificationCode = new Random().Next(1000, 9999).ToString(),
                 IsApprove = false

@@ -2,7 +2,7 @@
 {
     public class RegisterDTO
     {
-        public string UserName { get; set; }
+        public string Name { get; set; }
         
         [EmailAddress]
         public string Email { get; set; }

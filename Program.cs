@@ -17,8 +17,6 @@ namespace Shoes_Ecommerce
                 );
             });
 
-
-
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
                 options => 
                 {
@@ -32,6 +30,7 @@ namespace Shoes_Ecommerce
             {
                 options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
                 options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+                options.User.AllowedUserNameCharacters = "";
             });
 
             builder.Services.AddAuthentication(option =>
