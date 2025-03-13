@@ -1,4 +1,4 @@
-﻿namespace Shoes_Ecommerce.DTO
+﻿namespace Shoes_Ecommerce.DTO.AuthenticationDTO
 {
     public class VerificationEmailDTO
     {

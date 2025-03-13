@@ -16,3 +16,4 @@ global using System.ComponentModel.DataAnnotations.Schema;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Shoes_Ecommerce.Data;
+global using Shoes_Ecommerce.DTO.AuthenticationDTO;
