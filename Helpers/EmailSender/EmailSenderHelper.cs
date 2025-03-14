@@ -1,4 +1,4 @@
-﻿namespace Shoes_Ecommerce.Helpers
+﻿namespace Shoes_Ecommerce.Helpers.EmailSender
 {
     public class EmailSenderHelper
     {

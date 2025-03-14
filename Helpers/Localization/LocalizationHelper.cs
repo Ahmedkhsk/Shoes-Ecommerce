@@ -1,4 +1,4 @@
-﻿namespace Shoes_Ecommerce.Helpers
+﻿namespace Shoes_Ecommerce.Helpers.Localization
 {
     public class LocalizationHelper
     {
@@ -78,7 +78,24 @@
             {
                 ["en"] = "Email or Password Invalid.",
                 ["ar"] = "الايميل او الباسورد خطا."
+            },
+            ["CategoryAddedSuccess"] = new()
+            {
+                ["en"] = "Category added successfully.",
+                ["ar"] = "تم إضافة الفئة بنجاح."
+            },
+            ["NoCategoriesFound"] = new()
+            {
+                ["en"] = "No categories found.",
+                ["ar"] = "لم يتم العثور على أي فئات."
+            },
+            ["CategoriesRetrieved"] = new()
+            {
+                ["en"] = "Categories retrieved successfully.",
+                ["ar"] = "تم استرجاع الفئات بنجاح."
             }
+
+
         };
 
         public static string GetLocalizedMessage(string key, string lan)
