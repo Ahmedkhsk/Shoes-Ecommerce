@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http.Features;
+
 namespace Shoes_Ecommerce
 {
     public class Program
@@ -13,8 +15,13 @@ namespace Shoes_Ecommerce
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<ICategoryService,CategoryService>();
-         
-            
+
+            builder.Services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 104857600; 
+            });
+
+
             builder.Services.AddDbContext<Context>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DB")
@@ -82,6 +89,8 @@ namespace Shoes_Ecommerce
             app.UseCors("MyPolicy");
 
             //app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();  
             app.UseAuthorization();
