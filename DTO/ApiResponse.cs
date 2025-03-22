@@ -2,13 +2,13 @@
 {
     public class ApiResponse
     {
-        public bool Succes { get; set; }
+        public bool Success { get; set; }
         public string? Message { get; set; }
         public dynamic Data { get; set; }
 
-        public ApiResponse(bool Succes, string Message = default!, dynamic Data = default!)
+        public ApiResponse(bool Success, string Message = default!, dynamic Data = default!)
         {
-            this.Succes = Succes;
+            this.Success = Success;
             this.Message = Message;
             this.Data = Data;
         }

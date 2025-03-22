@@ -6,8 +6,9 @@
         public void Update(T entity);
         public Task DeleteAsync(int id);
         public Task<IEnumerable<T>> GetAllAsync();
+        public Category GetCategoryIncludeAllProducts(int id);
         public Task<T> GetByIdAsync(int id);
-        public void Save();
+        public Task Save();
 
     }
 }

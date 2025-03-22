@@ -93,9 +93,27 @@
             {
                 ["en"] = "Categories retrieved successfully.",
                 ["ar"] = "تم استرجاع الفئات بنجاح."
+            },
+            ["ProductAddedSuccess"] = new()
+            {
+                ["en"] = "Product added successfully.",
+                ["ar"] = "تم إضافة المنتج بنجاح."
+            },
+            ["NoProductsFound"] = new()
+            {
+                ["en"] = "No Products found.",
+                ["ar"] = "لم يتم العثور على أي منتجات."
+            },
+            ["ProductsRetrieved"] = new()
+            {
+                ["en"] = "Products retrieved successfully.",
+                ["ar"] = "تم استرجاع المنتجات بنجاح."
+            },
+            ["ImagesUploadedSuccessfully"] = new() 
+            {
+                ["en"] = "Images uploaded successfully.",
+                ["ar"] = "تم رفع الصور بنجاح."
             }
-
-
         };
 
         public static string GetLocalizedMessage(string key, string lan)

@@ -1,0 +1,121 @@
+﻿using Shoes_Ecommerce.DTO.ProductDTO;
+
+namespace Shoes_Ecommerce.Services
+{
+    public class ProductService : IProductService
+    {
+        private readonly IGenericRepository<Product> productRepo;
+        private readonly IGenericRepository<ProductColor> colorRepo;
+        private readonly IGenericRepository<ProductSize> sizeRepo;
+        private readonly IGenericRepository<ProductImage> imageRepo;
+        private readonly IGenericRepository<Category> categoryRepo;
+        private readonly IGenericRepository<ProductVariant> variantRepo;
+        private readonly string ImagePath;
+        public ProductService(
+            IGenericRepository<Product> productRepo , IGenericRepository<ProductColor> colorRepo,
+            IGenericRepository<ProductSize> sizeRepo, IGenericRepository<ProductImage> ImageRepo
+            ,IWebHostEnvironment webHostEnvironment , IGenericRepository<Category> categoryRepo,
+            IGenericRepository<ProductVariant> VariantRepo
+                                )
+        {
+            this.productRepo = productRepo;
+            this.colorRepo = colorRepo;
+            this.sizeRepo = sizeRepo;
+            imageRepo = ImageRepo;
+            this.categoryRepo = categoryRepo;
+            variantRepo = VariantRepo;
+            ImagePath = Path.Combine(webHostEnvironment.WebRootPath, FileSetting.ImagesPathProduct.TrimStart('/'));
+        }
+
+        public async Task AddProductAsync(ProductDTO productDto)
+        {
+            Product product = new Product();
+
+            product.NameEn = productDto.NameEn;
+            product.NameAr = productDto.NameAr;
+            product.descriptionEn = productDto.descriptionEn;
+            product.descriptionAr = productDto.descriptionAr;
+            product.Price = productDto.Price;
+            product.discount = productDto.discount;
+            product.CategoryID = productDto.Category;
+
+            await productRepo.AddAsync(product);
+            await productRepo.Save();
+
+            List<ProductVariantDTO> productVariants = productDto.ProductVariants;
+
+            foreach (var VariantDTO in productVariants)
+            {
+                var color = new ProductColor
+                {
+                    hexCode = VariantDTO.colorHexCode
+                };
+
+                await colorRepo.AddAsync(color);
+                await colorRepo.Save();
+
+                var size = new ProductSize
+                {
+                    SizeValue = VariantDTO.sizeValue,
+                    sizeName = ProductSizeName.GetSizeName(VariantDTO.sizeValue)
+                };
+
+                await sizeRepo.AddAsync(size);
+                await sizeRepo.Save();
+
+                ProductVariant productVariant = new ProductVariant
+                {
+                    ProductId = product.Id,
+                    ColorId = color.Id,
+                    SizeId = size.Id,
+                    QuantityInStock = VariantDTO.QuantityInStock
+                };
+
+                await variantRepo.AddAsync(productVariant);
+                await variantRepo.Save();
+
+                product.Variants.Add(productVariant);
+
+            }
+        }
+
+        public async Task UploadImagesAsync(int productId, List<IFormFile> images)
+        {
+            if (images == null || !images.Any())
+                throw new ArgumentException("No images provided.");
+
+            var product = await productRepo.GetByIdAsync(productId);
+            if (product == null)
+                throw new KeyNotFoundException("Product not found.");
+
+            foreach (var image in images)
+            {
+                string cover = await Images.SaveImage(image, ImagePath);
+
+                ProductImage productImage = new ProductImage
+                {
+                    ProductID = productId,
+                    ImageUrl = cover
+                };
+
+                await imageRepo.AddAsync(productImage);
+                await imageRepo.Save();
+
+                product.Images.Add(productImage);
+
+            }
+        }
+
+        public IEnumerable<Product> GetAllProducts(int CategoryId)
+        {
+            Category category = categoryRepo.GetCategoryIncludeAllProducts(CategoryId);
+            if (category == null)
+            {
+                return Enumerable.Empty<Product>();
+            }
+            return category.Products;
+        }
+
+
+    }
+}

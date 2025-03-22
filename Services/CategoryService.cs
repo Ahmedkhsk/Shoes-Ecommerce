@@ -1,16 +1,13 @@
-﻿
-namespace Shoes_Ecommerce.Services
+﻿namespace Shoes_Ecommerce.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly IGenericRepository<Category> categoryRepo;
-        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly string imagePath;
 
         public CategoryService(IGenericRepository<Category> categoryRepo, IWebHostEnvironment webHostEnvironment)
         {
             this.categoryRepo = categoryRepo;
-            this.webHostEnvironment = webHostEnvironment;
             imagePath = Path.Combine(webHostEnvironment.WebRootPath, FileSetting.ImagesPathCategory.TrimStart('/'));
         }
 
@@ -25,7 +22,7 @@ namespace Shoes_Ecommerce.Services
 
             await categoryRepo.AddAsync(newCategory);
 
-            categoryRepo.Save();
+            await categoryRepo.Save();
         }
 
         public Task<IEnumerable<Category>> GetAllCategoriesAsync()

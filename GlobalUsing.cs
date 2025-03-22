@@ -22,3 +22,5 @@ global using Shoes_Ecommerce.Helpers.Localization;
 global using Shoes_Ecommerce.Helpers.EmailSender;
 global using Shoes_Ecommerce.Services;
 global using Shoes_Ecommerce.Helpers.Images;
+global using Shoes_Ecommerce.Helpers.ProductSize;
+global using Shoes_Ecommerce.DTO.ProductDTO;
