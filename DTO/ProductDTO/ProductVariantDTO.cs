@@ -1,4 +1,4 @@
-﻿namespace Shoes_Ecommerce.DTO
+﻿namespace Shoes_Ecommerce.DTO.ProductDTO
 {
     public class ProductVariantDTO
     {

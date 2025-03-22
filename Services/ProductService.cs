@@ -1,6 +1,4 @@
-﻿using Shoes_Ecommerce.DTO.ProductDTO;
-
-namespace Shoes_Ecommerce.Services
+﻿namespace Shoes_Ecommerce.Services
 {
     public class ProductService : IProductService
     {
