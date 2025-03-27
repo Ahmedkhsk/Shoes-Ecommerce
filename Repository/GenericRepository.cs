@@ -28,11 +28,6 @@ namespace Shoes_Ecommerce.Repository
                      .AsNoTracking()
                      .FirstOrDefault(c => c.Id == id);
         }
-
-        //public List<Product> GetProducts(int id)
-        //{
-        //   co
-        //}
         
         public async Task AddAsync(T entity) => await dbSet.AddAsync(entity);
         public  void Update(T entity) =>  dbSet.Update(entity);
