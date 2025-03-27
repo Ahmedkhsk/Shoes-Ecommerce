@@ -8,42 +8,11 @@
             {
                 return FilterProducts(entities.Cast<Product>(), lan);
             }
-
-            return entities.Select(entity =>
+            else if(typeof(T) == typeof(Category))
             {
-                var entityType = entity.GetType();
-                var properties = entityType.GetProperties();
-
-                var result = new Dictionary<string, object>();
-
-                foreach (var property in properties)
-                {
-                    if (property.GetIndexParameters().Length > 0 || !property.CanRead) 
-                        continue;
-
-                    var propertyName = property.Name;
-                    var propertyValue = property.GetValue(entity);
-
-                    if (propertyName.EndsWith("En", StringComparison.OrdinalIgnoreCase) && lan == "en")
-                    {
-                        result["name"] = propertyValue;
-                    }
-                    else if (propertyName.EndsWith("Ar", StringComparison.OrdinalIgnoreCase) && lan == "ar")
-                    {
-                        result["name"] = propertyValue;
-                    }
-                    else
-                    {
-                        if (!propertyName.EndsWith("En", StringComparison.OrdinalIgnoreCase) &&
-                            !propertyName.EndsWith("Ar", StringComparison.OrdinalIgnoreCase))
-                        {
-                            result[propertyName] = ProcessNestedProperty(propertyValue, lan);
-                        }
-                    }
-                }
-
-                return (object)result;
-            });
+                return FilterCategories(entities.Cast<Category>(), lan);
+            }
+            return default!;
         }
 
         private static IEnumerable<object> FilterProducts(IEnumerable<Product> products, string lan)
@@ -59,42 +28,33 @@
                     description = lan == "en" ? product.descriptionEn : product.descriptionAr,
                     productdate = product.productDate,
                     productsellers = product.productSellers,
-                    Variants = product.Variants?.Select(variant => new
+                    variants = product.Variants?.Select(variant => new
                     {
                         colorid = variant.ColorId,
                         color = variant.Color,
                         Quantity = variant.QuantityInStock
                     }).ToList(),
-                    Images = product.Images?.Select(image => new
+                    images = product.Images?.Select(image => new
                     {
                         imageurl = image.ImageUrl
                     }).ToList()
                 };
             });
         }
+        
 
-        private static object ProcessNestedProperty(object propertyValue, string lan)
+        private static IEnumerable<object> FilterCategories(IEnumerable<Category> categories, string lan)
         {
-            if (propertyValue == null)
-                return null;
-
-            var propertyType = propertyValue.GetType();
-
-            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(propertyType) && propertyType != typeof(string))
+            return categories.Select(category =>
             {
-                var enumerable = (System.Collections.IEnumerable)propertyValue;
-                var nestedResults = new List<object>();
-
-                foreach (var item in enumerable)
+                return new
                 {
-                    var nestedResult = FilterEntitiesByLanguage(new[] { item }, lan).FirstOrDefault();
-                    nestedResults.Add(nestedResult);
-                }
-
-                return nestedResults;
-            }
-
-            return FilterEntitiesByLanguage(new[] { propertyValue }, lan).FirstOrDefault();
+                    id = category.Id,
+                    name = lan == "en" ? category.NameEn : category.NameAr,
+                    imageurl = category.ImageUrl,
+                    products = category.Products?.ToList() 
+                };
+            });
         }
     }
 }

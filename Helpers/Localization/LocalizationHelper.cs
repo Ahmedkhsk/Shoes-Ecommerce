@@ -113,8 +113,63 @@
             {
                 ["en"] = "Images uploaded successfully.",
                 ["ar"] = "تم رفع الصور بنجاح."
+            },
+            ["ProductAddedToFavorites"] = new()
+            {
+                ["en"] = "Product added to favorites successfully.",
+                ["ar"] = "تمت إضافة المنتج إلى المفضلة بنجاح."
+            },
+            ["ProductRemovedFromFavorites"] = new()
+            {
+                ["en"] = "Product removed from favorites successfully.",
+                ["ar"] = "تمت إزالة المنتج من المفضلة بنجاح."
+            },
+            ["NoFavoritesFound"] = new()
+            {
+                ["en"] = "No favorites found.",
+                ["ar"] = "لم يتم العثور على المفضلات."
+            },
+            ["FavoritesRetrieved"] = new()
+            {
+                ["en"] = "Favorites retrieved successfully.",
+                ["ar"] = "تم استرجاع المفضلات بنجاح."
+            },
+            ["ProductAddedToCart"] = new()
+            {
+                ["en"] = "Product added to cart successfully.",
+                ["ar"] = "تمت إضافة المنتج إلى السلة بنجاح."
+            },
+            ["ProductRemovedFromCart"] = new()
+            {
+                ["en"] = "Product removed from cart successfully.",
+                ["ar"] = "تمت إزالة المنتج من السلة بنجاح."
+            },
+            ["NoCartItemsFound"] = new()
+            {
+                ["en"] = "No cart items found.",
+                ["ar"] = "لم يتم العثور على عناصر السلة."
+            },
+            ["CartItemsRetrieved"] = new()
+            {
+                ["en"] = "Cart items retrieved successfully.",
+                ["ar"] = "تم استرجاع عناصر السلة بنجاح."
+            },
+            ["CartItemsCleared"] = new()
+            {
+                ["en"] = "Cart items cleared successfully.",
+                ["ar"] = "تم مسح عناصر السلة بنجاح."
+            },
+            ["OrderPlacedSuccessfully"] = new()
+            {
+                ["en"] = "Order placed successfully.",
+                ["ar"] = "تم تقديم الطلب بنجاح."
+            },
+            ["NoOrdersFound"] = new()
+            {
+                ["en"] = "No orders found.",
+                ["ar"] = "لم يتم العثور على أي"
             }
-        };
+            };
 
         public static string GetLocalizedMessage(string key, string lan)
         {

@@ -13,7 +13,7 @@ namespace Shoes_Ecommerce.Repository
             dbSet = context.Set<T>();
         }
         public async Task<IEnumerable<T>> GetAllAsync() => await dbSet.ToListAsync();
-        public async Task<T> GetByIdAsync(int id) => await dbSet.FindAsync(id);
+        public async Task<T> GetByIdAsync(dynamic id) => await dbSet.FindAsync(id);
         public Category GetCategoryIncludeAllProducts(int id)
         {
             return context.Categories
@@ -28,14 +28,34 @@ namespace Shoes_Ecommerce.Repository
                      .AsNoTracking()
                      .FirstOrDefault(c => c.Id == id);
         }
+
+        public List<Product> GetProductsFavorite(string id)
+        {
+            List<Product> products = context.Favorites
+                .Include(f => f.Product)
+                    .ThenInclude(p => p.Variants)
+                        .ThenInclude(v => v.Color)
+                .Include(f => f.Product)
+                    .ThenInclude(p => p.Variants)
+                        .ThenInclude(v => v.Size)
+                .Include(f => f.Product)
+                    .ThenInclude(p => p.Images)
+                .Where(f => f.userId == id)
+                .Select(f => f.Product)
+                .ToList();
+
+            return products;
+        }
+
         public async Task AddAsync(T entity) => await dbSet.AddAsync(entity);
         public  void Update(T entity) =>  dbSet.Update(entity);
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(dynamic id)
         {
             var entity = await dbSet.FindAsync(id);
             if (entity != null)
                 dbSet.Remove(entity);
         }
+      
         public async Task Save() => await context.SaveChangesAsync();
         
 

@@ -24,3 +24,4 @@ global using Shoes_Ecommerce.Services;
 global using Shoes_Ecommerce.Helpers.Images;
 global using Shoes_Ecommerce.Helpers.ProductSize;
 global using Shoes_Ecommerce.DTO.ProductDTO;
+global using Shoes_Ecommerce.DTO.FavoriteDTO;
