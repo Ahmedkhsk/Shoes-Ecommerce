@@ -10,9 +10,9 @@
         private readonly IGenericRepository<ProductVariant> variantRepo;
         private readonly string ImagePath;
         public ProductService(
-            IGenericRepository<Product> productRepo , IGenericRepository<ProductColor> colorRepo,
+            IGenericRepository<Product> productRepo, IGenericRepository<ProductColor> colorRepo,
             IGenericRepository<ProductSize> sizeRepo, IGenericRepository<ProductImage> ImageRepo
-            ,IWebHostEnvironment webHostEnvironment , IGenericRepository<Category> categoryRepo,
+            , IWebHostEnvironment webHostEnvironment, IGenericRepository<Category> categoryRepo,
             IGenericRepository<ProductVariant> VariantRepo
                                 )
         {

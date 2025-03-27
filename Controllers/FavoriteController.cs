@@ -32,14 +32,16 @@ namespace Shoes_Ecommerce.Controllers
             await favoriteService.RemoveFavoriteAsync(favoriteDTO);
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductRemovedFromFavorites", lan)));
         }
-        [HttpGet("GetAll")]
-        public IActionResult getfavorites(FavoriteGetDTO favoriteGetDTO, string lan = "en")
+        
+        [HttpGet("GetAll/{userId}")]
+        public IActionResult getfavorites(string userId, string lan = "en")
         {
-            var favorites = favoriteService.GetFavorites(favoriteGetDTO);
-            if (favorites == null || !favorites.Any())
+            var products = favoriteService.GetFavorites(userId);
+
+            if (products == null || !products.Any())
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("NoFavoritesFound", lan)));
             
-            var filteredFavorites = EntityHelper.FilterEntitiesByLanguage(favorites, lan);
+            var filteredFavorites = EntityHelper.FilterEntitiesByLanguage(products, lan);
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("FavoritesRetrieved", lan), filteredFavorites));
         }
     }

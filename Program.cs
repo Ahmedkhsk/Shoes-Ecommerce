@@ -8,10 +8,7 @@ namespace Shoes_Ecommerce
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<ICategoryService,CategoryService>();
@@ -22,7 +19,6 @@ namespace Shoes_Ecommerce
             {
                 options.MultipartBodyLengthLimit = 104857600; 
             });
-
 
             builder.Services.AddDbContext<Context>(options =>
             {
@@ -76,28 +72,23 @@ namespace Shoes_Ecommerce
             });
 
             builder.Services.AddEndpointsApiExplorer();
+            
             builder.Services.AddSwaggerGen();
 
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            //}
+            app.UseSwagger();
 
+            app.UseSwaggerUI();
+            
             app.UseCors("MyPolicy");
-
-            //app.UseHttpsRedirection();
 
             app.UseStaticFiles();
 
             app.UseAuthentication();  
+ 
             app.UseAuthorization();
-
-
 
             app.MapControllers();
 

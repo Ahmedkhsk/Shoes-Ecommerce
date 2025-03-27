@@ -15,7 +15,7 @@ namespace Shoes_Ecommerce.Controllers
             this.productService = productService;
         }
 
-        [HttpPost]
+        [HttpPost("Add")]
         public async Task<IActionResult> AddProduct(ProductDTO productDTO, string lan = "en")
         {
             if(!ModelState.IsValid)

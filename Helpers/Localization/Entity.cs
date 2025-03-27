@@ -1,4 +1,6 @@
-﻿namespace Shoes_Ecommerce.Helpers.Localization
+﻿using System.Drawing;
+
+namespace Shoes_Ecommerce.Helpers.Localization
 {
     public static class EntityHelper
     {
@@ -26,17 +28,19 @@
                     price = product.Price,
                     discount = product.discount,
                     description = lan == "en" ? product.descriptionEn : product.descriptionAr,
-                    productdate = product.productDate,
-                    productsellers = product.productSellers,
+                    productDate = product.productDate,
+                    productSellers = product.productSellers,
                     variants = product.Variants?.Select(variant => new
                     {
-                        colorid = variant.ColorId,
+                        colorId = variant.ColorId,
                         color = variant.Color,
-                        Quantity = variant.QuantityInStock
+                        sizeValue = variant.Size.SizeValue,
+                        sizeName = variant.Size.sizeName,
+                        quantity = variant.QuantityInStock
                     }).ToList(),
                     images = product.Images?.Select(image => new
                     {
-                        imageurl = image.ImageUrl
+                        imageUrl = image.ImageUrl
                     }).ToList()
                 };
             });
@@ -51,8 +55,7 @@
                 {
                     id = category.Id,
                     name = lan == "en" ? category.NameEn : category.NameAr,
-                    imageurl = category.ImageUrl,
-                    products = category.Products?.ToList() 
+                    imageUrl = category.ImageUrl
                 };
             });
         }

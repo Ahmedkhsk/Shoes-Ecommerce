@@ -6,6 +6,6 @@ namespace Shoes_Ecommerce.Services
     {
         public Task AddFavoriteAsync(FavoriteAddDTO favoriteDTO);
         public Task RemoveFavoriteAsync(FavoriteAddDTO favoriteDTO);
-        public List<Product> GetFavorites(FavoriteGetDTO favoriteGetDTO);
+        public List<Product> GetFavorites(string id);
     }
 }

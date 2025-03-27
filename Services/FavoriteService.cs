@@ -23,17 +23,19 @@ namespace Shoes_Ecommerce.Services
             
             if (user != null && product != null)
             {
-                favRepo?.AddAsync(new Favorite
+                await favRepo.AddAsync(new Favorite
                 {
                     productId = favoriteDTO.productId,
                     userId = favoriteDTO.userId
                 });
+
+                await favRepo.Save();
             }
         }
 
-        public List<Product> GetFavorites(FavoriteGetDTO favoriteGetDTO)
+        public List<Product> GetFavorites(string id)
         {
-            List<Product> products = favRepo.GetProductsFavorite(favoriteGetDTO.userId);
+            List<Product> products = favRepo.GetProductsFavorite(id);
             return products;
         }
 
@@ -49,6 +51,7 @@ namespace Shoes_Ecommerce.Services
                 {
                     await favRepo.DeleteAsync(facorite.Id);
                 }
+                await favRepo.Save();
             }
         }
     }
