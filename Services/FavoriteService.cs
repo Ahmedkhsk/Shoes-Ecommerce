@@ -1,5 +1,4 @@
-﻿
-namespace Shoes_Ecommerce.Services
+﻿namespace Shoes_Ecommerce.Services
 {
     public class FavoriteService : IFavoriteService
     {
@@ -20,18 +19,21 @@ namespace Shoes_Ecommerce.Services
         {
             var user = await userRepo.GetByIdAsync(favoriteDTO.userId);
             var product = await productRepo.GetByIdAsync(favoriteDTO.productId);
-            
-            //Check لو هما موجودين في الداتا بيز
-            
-            if (user != null && product != null)
-            {
-                await favRepo.AddAsync(new Favorite
-                {
-                    productId = favoriteDTO.productId,
-                    userId = favoriteDTO.userId
-                });
 
-                await favRepo.Save();
+            var favorite = favRepo.GetAllAsync().Result.FirstOrDefault(f => f.userId == favoriteDTO.userId && f.productId == favoriteDTO.productId);
+            
+            if (favorite == null)
+            {
+                if (user != null && product != null)
+                {
+                    await favRepo.AddAsync(new Favorite
+                    {
+                        productId = favoriteDTO.productId,
+                        userId = favoriteDTO.userId
+                    });
+
+                    await favRepo.Save();
+                }
             }
         }
 
@@ -48,11 +50,11 @@ namespace Shoes_Ecommerce.Services
 
             if (user != null && product != null)
             {
-                var facorite = favRepo.GetAllAsync().Result.FirstOrDefault(f => f.userId == favoriteDTO.userId && f.productId == favoriteDTO.productId);
-                if (facorite != null)
-                {
-                    await favRepo.DeleteAsync(facorite.Id);
-                }
+                var favorite = favRepo.GetAllAsync().Result.FirstOrDefault(f => f.userId == favoriteDTO.userId && f.productId == favoriteDTO.productId);
+                
+                if (favorite != null)
+                    await favRepo.DeleteAsync(favorite.Id);
+                
                 await favRepo.Save();
             }
         }
