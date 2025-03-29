@@ -32,6 +32,7 @@ namespace Shoes_Ecommerce.Helpers.Localization
                     productSellers = product.productSellers,
                     variants = product.Variants?.Select(variant => new
                     {
+                        id = variant.Id,
                         colorId = variant.ColorId,
                         color = variant.Color,
                         sizeValue = variant.Size.SizeValue,

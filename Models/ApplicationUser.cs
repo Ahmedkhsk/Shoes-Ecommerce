@@ -7,6 +7,7 @@
         public string? verificationCode { get; set; } = default!;
         public bool IsApprove { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
+        public string deviceToken { get; set; } = string.Empty;
 
     }
 }

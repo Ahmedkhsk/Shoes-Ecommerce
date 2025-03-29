@@ -140,6 +140,9 @@
                 var CheckPass = await userManager.CheckPasswordAsync(userExist, Model.password);
                 if (CheckPass)
                 {
+                    //userExist.deviceToken = Model.deviceToken;
+                    await userManager.UpdateAsync(userExist);
+
                     List<Claim> Claims = new List<Claim>();
                     Claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
                     Claims.Add(new Claim(ClaimTypes.NameIdentifier,userExist.Id));

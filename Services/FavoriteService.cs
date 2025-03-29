@@ -21,6 +21,8 @@ namespace Shoes_Ecommerce.Services
             var user = await userRepo.GetByIdAsync(favoriteDTO.userId);
             var product = await productRepo.GetByIdAsync(favoriteDTO.productId);
             
+            //Check لو هما موجودين في الداتا بيز
+            
             if (user != null && product != null)
             {
                 await favRepo.AddAsync(new Favorite

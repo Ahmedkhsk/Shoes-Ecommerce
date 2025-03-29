@@ -25,3 +25,8 @@ global using Shoes_Ecommerce.Helpers.Images;
 global using Shoes_Ecommerce.Helpers.ProductSize;
 global using Shoes_Ecommerce.DTO.ProductDTO;
 global using Shoes_Ecommerce.DTO.FavoriteDTO;
+global using FirebaseAdmin.Messaging;
+global using Shoes_Ecommerce.Helpers.Notificaciones;
+global using FirebaseAdmin;
+global using Google.Apis.Auth.OAuth2;
+global using Microsoft.AspNetCore.Http.Features;
