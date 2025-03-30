@@ -13,6 +13,8 @@ namespace Shoes_Ecommerce
             builder.Services.AddScoped<ICategoryService,CategoryService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+            builder.Services.AddScoped<ICartService, CartService>();
+
 
             builder.Services.Configure<FormOptions>(options =>
             {

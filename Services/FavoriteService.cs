@@ -39,7 +39,7 @@
 
         public List<Product> GetFavorites(string id)
         {
-            List<Product> products = favRepo.GetProductsFavorite(id);
+            List<Product> products = favRepo.GetProductsByUserID(id);
             return products;
         }
 
@@ -58,5 +58,6 @@
                 await favRepo.Save();
             }
         }
+    
     }
 }

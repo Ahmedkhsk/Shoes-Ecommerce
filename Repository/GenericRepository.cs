@@ -29,7 +29,7 @@ namespace Shoes_Ecommerce.Repository
                      .FirstOrDefault(c => c.Id == id);
         }
 
-        public List<Product> GetProductsFavorite(string id)
+        public List<Product> GetProductsByUserID(string id)
         {
             List<Product> products = context.Favorites
                 .Include(f => f.Product)
@@ -42,6 +42,23 @@ namespace Shoes_Ecommerce.Repository
                     .ThenInclude(p => p.Images)
                 .Where(f => f.userId == id)
                 .Select(f => f.Product)
+                .ToList();
+
+            return products;
+        }
+        public List<Product> GetProductsByUserIDInCart(string id)
+        {
+            List<Product> products = context.Carts
+                .Include(f => f.product)
+                    .ThenInclude(p => p.Variants)
+                        .ThenInclude(v => v.Color)
+                .Include(f => f.product)
+                    .ThenInclude(p => p.Variants)
+                        .ThenInclude(v => v.Size)
+                .Include(f => f.product)
+                    .ThenInclude(p => p.Images)
+                .Where(f => f.userId == id)
+                .Select(f => f.product)
                 .ToList();
 
             return products;

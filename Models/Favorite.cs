@@ -1,5 +1,6 @@
 ﻿namespace Shoes_Ecommerce.Models
 {
+    [Table("Favorite")]
     public class Favorite
     {
         public int Id { get; set; }

@@ -7,7 +7,8 @@
         public Task DeleteAsync(dynamic id);
         public Task<IEnumerable<T>> GetAllAsync();
         public Category GetCategoryIncludeAllProducts(int id);
-        public List<Product> GetProductsFavorite(string userid);
+        public List<Product> GetProductsByUserID(string id);
+        public List<Product> GetProductsByUserIDInCart(string id);
         public Task<T> GetByIdAsync(dynamic id);
         public Task Save();
     }
