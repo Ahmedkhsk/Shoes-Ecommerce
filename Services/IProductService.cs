@@ -1,9 +1,12 @@
-﻿namespace Shoes_Ecommerce.Services
+﻿using Shoes_Ecommerce.DTO.ProductDTO;
+
+namespace Shoes_Ecommerce.Services
 {
     public interface IProductService
     {
         public Task AddProductAsync(ProductDTO product);
         public IEnumerable<Product> GetAllProducts(int CategoryId);
+        public IEnumerable<Product> GetAllProductsWithFilter(FilterDTO filterDTO);
         Task UploadImagesAsync(int productId, List<IFormFile> images);
     }
 }

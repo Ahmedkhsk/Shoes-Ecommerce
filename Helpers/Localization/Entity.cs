@@ -29,6 +29,7 @@ namespace Shoes_Ecommerce.Helpers.Localization
                     discount = product.discount,
                     description = lan == "en" ? product.descriptionEn : product.descriptionAr,
                     productDate = product.productDate,
+                    targetGender = product.targetGender,
                     productSellers = product.productSellers,
                     variants = product.Variants?.Select(variant => new
                     {

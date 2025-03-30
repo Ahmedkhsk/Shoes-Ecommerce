@@ -12,6 +12,7 @@
         public string descriptionAr { get; set; } = string.Empty;
         public DateTime productDate { get; set; } = DateTime.Now;
         public int productSellers { get; set; }
+        public string targetGender { get; set; } = default!;
         public ICollection<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
         public int CategoryID { get; set; }

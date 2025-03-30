@@ -36,6 +36,7 @@
             product.Price = productDto.Price;
             product.discount = productDto.discount;
             product.CategoryID = productDto.Category;
+            product.targetGender = productDto.targetGender;
 
             await productRepo.AddAsync(product);
             await productRepo.Save();
@@ -103,7 +104,13 @@
 
             }
         }
-
+        public IEnumerable<Product> GetAllProductsWithFilter(FilterDTO filterDTO)
+        {
+            var products = productRepo.getAllProductWithFilter(filterDTO);
+            if(products == null || !products.Any())
+                return Enumerable.Empty<Product>();
+            return products;
+        }
         public IEnumerable<Product> GetAllProducts(int CategoryId)
         {
             Category category = categoryRepo.GetCategoryIncludeAllProducts(CategoryId);

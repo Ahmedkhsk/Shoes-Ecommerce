@@ -39,7 +39,19 @@ namespace Shoes_Ecommerce.Controllers
                 return BadRequest(new ApiResponse(false, ex.Message));
             }
         }
+        
+        [HttpGet("Filter")]
+        public ActionResult Filter([FromQuery]FilterDTO filterDTO, string lan = "en")
+        {
+            var Products = productService.GetAllProductsWithFilter(filterDTO);
+            if (Products == null || !Products.Any())
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("NoProductsFound", lan), Enumerable.Empty<Product>()));
 
+            var filteredProducts = EntityHelper.FilterEntitiesByLanguage(Products, lan);
+
+            return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductsRetrieved", lan), filteredProducts));
+        }
+        
         [HttpGet("GetAll/{categoryId}")]
         public ActionResult GetAll(int categoryId, string lan = "en")
         {
@@ -51,5 +63,6 @@ namespace Shoes_Ecommerce.Controllers
 
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductsRetrieved", lan), filteredProducts));
         }
+
     }
 }
