@@ -168,8 +168,25 @@
             {
                 ["en"] = "No orders found.",
                 ["ar"] = "لم يتم العثور على أي"
+            },
+            ["ImageUpload"] = new()
+            {
+                ["en"] = "An error occurred while uploading the image.",
+                ["ar"] = "حدث خطأ أثناء رفع الصورة."
+            },
+            ["UpdateFailed"] = new()
+            {
+                ["en"] = "Failed to update the profile.",
+                ["ar"] = "فشل في تحديث الملف الشخصي."
+            },
+
+            ["ProfileUpdated"] = new()
+            {
+                ["en"] = "Profile updated successfully.",
+                ["ar"] = "تم تحديث الملف الشخصي بنجاح."
             }
-            };
+
+        };
 
         public static string GetLocalizedMessage(string key, string lan)
         {

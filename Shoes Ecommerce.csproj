@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\assets\images\category\" />
     <Folder Include="wwwroot\assets\images\product\" />
-    <Folder Include="wwwroot\assets\images\user\" />
   </ItemGroup>
 
 </Project>

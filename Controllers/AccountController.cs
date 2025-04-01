@@ -1,4 +1,7 @@
-﻿namespace Shoes_Ecommerce.Controllers
+﻿using Microsoft.AspNetCore.Hosting;
+using System.Threading.Tasks;
+
+namespace Shoes_Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -6,11 +9,14 @@
     {
         private UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configure;
+        private readonly string imagePath;
 
-        public AccountController(UserManager<ApplicationUser> userManager , IConfiguration configure)
+        public AccountController(UserManager<ApplicationUser> userManager , IConfiguration configure,
+            IWebHostEnvironment webHostEnvironment)
         {
             this.userManager = userManager;
             this.configure = configure;
+            imagePath = Path.Combine(webHostEnvironment.WebRootPath, FileSetting.ImagesPathUser.TrimStart('/'));
         }
 
         [HttpPost("Register")]
@@ -35,12 +41,13 @@
             {
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("EmailAlreadyExists", lan)));
             }
-
+            var image = "default.png";
             var user = new ApplicationUser
             {
                 Name = Model.Name,
                 UserName = Model.Name+Guid.NewGuid(),
                 Email = Model.Email,
+                ImageUrl = image,
                 verificationCode = new Random().Next(1000, 9999).ToString(),
                 IsApprove = false
             };
@@ -169,5 +176,34 @@
 
             return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("LoginFailed", lan)));
         }
+
+        [HttpPut("UpdateProfile")]
+        public async Task<IActionResult> updateProfile(updateUserDTO updateUserDTO,string lan = "en")
+        {
+            var user = await userManager.FindByIdAsync(updateUserDTO.userId);
+            if (user != null)
+            {
+                user.Name = updateUserDTO.userName;
+                
+                var image = "default.png";
+                if (user.ImageUrl != image)
+                {
+                    var oldImage = user.ImageUrl;
+                    var newImage = await Images.SaveImage(updateUserDTO.imageName,imagePath);
+                    user.ImageUrl = newImage;
+                    Images.DeleteImage(oldImage,imagePath);
+                }
+                else
+                {
+                    var cover = await Images.SaveImage(updateUserDTO.imageName, imagePath);
+                    user.ImageUrl = cover;        
+                }
+
+                await userManager.UpdateAsync(user);
+                return Ok(new ApiResponse(true,LocalizationHelper.GetLocalizedMessage("ProfileUpdated", lan)));
+            }
+            return BadRequest(new ApiResponse(false,LocalizationHelper.GetLocalizedMessage("UpdateFailed", lan)));
+        }
+
     }
 }

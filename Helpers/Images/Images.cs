@@ -12,6 +12,14 @@
            
             return ImageName;
         }
+        public static void DeleteImage(string imageName , string imagePath)
+        {
+            var imageUrl = Path.Combine(imagePath, imageName);
+            
+            if (File.Exists(imageUrl))
+                File.Delete(imageUrl);
+        }
+        
     }
 
 

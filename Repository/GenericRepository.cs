@@ -30,7 +30,21 @@ namespace Shoes_Ecommerce.Repository
         }
         public List<Product> getAllProductWithFilter(FilterDTO filterDTO)
         {
-            var products = context.Products
+            if(filterDTO.targetGender == "All")         
+                return context.Products
+                    .Include(p => p.Variants)
+                        .ThenInclude(v => v.Color)
+                    .Include(p => p.Variants)
+                        .ThenInclude(v => v.Size)
+                    .Include(p => p.Images)
+                    .Where(p => p.CategoryID == filterDTO.categoryId)
+                    .Where(p => p.Variants.Any(v => v.Size.SizeValue == filterDTO.sizeValue))
+                    .Where(p => p.Price > filterDTO.minPrice && p.Price < filterDTO.maxPrice)
+                    .AsNoTracking()
+                    .ToList();
+            
+            else 
+             return context.Products
                 .Include(p => p.Variants)
                     .ThenInclude(v => v.Color)
                 .Include(p => p.Variants)
@@ -42,7 +56,6 @@ namespace Shoes_Ecommerce.Repository
                 .Where(p => p.targetGender.Equals(filterDTO.targetGender))
                 .AsNoTracking()
                 .ToList();
-            return products;
         }
         public List<Product> GetProductsByUserID(string id)
         {
