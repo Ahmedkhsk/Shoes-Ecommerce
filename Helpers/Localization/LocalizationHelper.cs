@@ -185,7 +185,12 @@
                 ["en"] = "Profile updated successfully.",
                 ["ar"] = "تم تحديث الملف الشخصي بنجاح."
             }
-
+            ,
+            ["UserRetrived"] = new()
+            {
+                ["en"] = "User retrived successfully.",
+                ["ar"] = "تم استرجاع المستخدم بنجاح."
+            }
         };
 
         public static string GetLocalizedMessage(string key, string lan)

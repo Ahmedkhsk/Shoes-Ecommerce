@@ -6,6 +6,6 @@ namespace Shoes_Ecommerce.Services
     {
         public Task AddCartAsync(CartDTO cartDTO);
         public Task RemoveCartAsync(RemoveCartDTO cartDTO);
-        public List<Product> GetCarts(string id);
+        public Task<GetCartDTO> GetCarts(string id);
     }
 }

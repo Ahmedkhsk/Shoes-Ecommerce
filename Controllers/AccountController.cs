@@ -205,5 +205,23 @@ namespace Shoes_Ecommerce.Controllers
             return BadRequest(new ApiResponse(false,LocalizationHelper.GetLocalizedMessage("UpdateFailed", lan)));
         }
 
+
+        [HttpGet("GetUser")]
+        public IActionResult getUser(string userId,string lan= "en")
+        {
+            var user = userManager.Users.FirstOrDefault(f => f.Id == userId);
+            
+            userDTO userDTO = new userDTO();
+            
+            userDTO.userName = user.Name;
+            userDTO.email = user.Email;
+            userDTO.imageName = user.ImageUrl;
+
+            if (user != null)
+            {
+                return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("UserRetrived",lan), userDTO));
+            }
+            return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNotFound", lan)));
+        }
     }
 }

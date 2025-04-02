@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Shoes_Ecommerce.DTO.CartDTO;
-
-namespace Shoes_Ecommerce.Controllers
+﻿namespace Shoes_Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -36,15 +32,19 @@ namespace Shoes_Ecommerce.Controllers
         }
 
         [HttpGet("GetAll/{userId}")]
-        public IActionResult getCarts(string userId, string lan = "en")
+        public async Task<IActionResult> getCarts(string userId, string lan = "en")
         {
-            var products = cartService.GetCarts(userId);
+            GetCartDTO cart =  await cartService.GetCarts(userId);
 
-            if (products == null || !products.Any())
+            if (cart.products == null || !cart.products.Any())
+            {
+                cart.products = new List<getProductsOfCart>();
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("NoCartItemsFound", lan)));
+            }
 
-            var filteredFavorites = EntityHelper.FilterEntitiesByLanguage(products, lan);
-            return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("CartItemsRetrieved", lan), filteredFavorites));
+            var filteredCart = EntityHelper.FilterCart(cart, lan);
+
+            return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("CartItemsRetrieved", lan), filteredCart));
         }
     }
 }

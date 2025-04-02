@@ -30,3 +30,4 @@ global using Shoes_Ecommerce.Helpers.Notificaciones;
 global using FirebaseAdmin;
 global using Google.Apis.Auth.OAuth2;
 global using Microsoft.AspNetCore.Http.Features;
+global using Shoes_Ecommerce.DTO.CartDTO;

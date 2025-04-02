@@ -1,4 +1,5 @@
 ﻿using Shoes_Ecommerce.DTO.CartDTO;
+using System.Threading.Tasks;
 
 namespace Shoes_Ecommerce.Services
 {
@@ -61,10 +62,31 @@ namespace Shoes_Ecommerce.Services
             }
         }
 
-        public List<Product> GetCarts(string id)
+        public async Task<GetCartDTO> GetCarts(string id)
         {
+            GetCartDTO getCartDTO = new GetCartDTO();
+            double totalPrice = 0;
             List<Product> products = cartRepo.GetProductsByUserIDInCart(id);
-            return products;
+            List<getProductsOfCart> productsOfCarts = new List<getProductsOfCart>();
+            foreach (var product in products)
+            {
+                var cart = cartRepo.GetAllAsync().Result.FirstOrDefault(f => f.userId == id && f.productId == product.Id);
+                var variant = await variantRepo.GetByIdAsync(cart.variantId);
+                productsOfCarts.Add(new getProductsOfCart
+                {
+                    productId = product.Id,
+                    productNameEn = product.NameEn,
+                    productNameAr = product.NameAr,
+                    price = product.Price,
+                    quantity = cart.quantity,
+                    imageName = product.Images.ToList()[0].ImageUrl,
+                    productSizeName = variant.Size.sizeName
+                });
+                totalPrice += product.Price * cart.quantity;
+            }
+            getCartDTO.products = productsOfCarts;
+            getCartDTO.totalPrice = totalPrice;
+            return getCartDTO;
         }
 
     
