@@ -12,7 +12,7 @@
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> addCart(CartDTO cartDTO, string lan = "en")
+        public async Task<IActionResult> AddCart(CartDTO cartDTO, string lan = "en")
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("InvalidRequest", lan)));
@@ -21,8 +21,8 @@
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductAddedToCart", lan)));
         }
 
-        [HttpDelete("Remove")]
-        public async Task<IActionResult> removeCart(RemoveCartDTO cartDTO, string lan = "en")
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> RemoveCart(RemoveCartDTO cartDTO, string lan = "en")
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("InvalidRequest", lan)));
@@ -32,7 +32,7 @@
         }
 
         [HttpGet("GetAll/{userId}")]
-        public async Task<IActionResult> getCarts(string userId, string lan = "en")
+        public async Task<IActionResult> GetCarts(string userId, string lan = "en")
         {
             GetCartDTO cart =  await cartService.GetCarts(userId);
 
@@ -42,8 +42,13 @@
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("NoCartItemsFound", lan)));
             }
 
-            var filteredCart = EntityHelper.FilterCart(cart, lan);
+            var filteredProducts = EntityHelper.FilterEntitiesByLanguage(cart.products, lan);
 
+            var filteredCart = new EntityCartDTO();
+
+            filteredCart.products = filteredProducts;
+            filteredCart.totalPrice = cart.totalPrice;
+  
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("CartItemsRetrieved", lan), filteredCart));
         }
     }

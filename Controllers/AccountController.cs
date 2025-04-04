@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using System.Threading.Tasks;
-
-namespace Shoes_Ecommerce.Controllers
+﻿namespace Shoes_Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -200,11 +197,10 @@ namespace Shoes_Ecommerce.Controllers
                 }
 
                 await userManager.UpdateAsync(user);
-                return Ok(new ApiResponse(true,LocalizationHelper.GetLocalizedMessage("ProfileUpdated", lan)));
+                return Ok(new ApiResponse(true,LocalizationHelper.GetLocalizedMessage("ProfileUpdated", lan),user));
             }
             return BadRequest(new ApiResponse(false,LocalizationHelper.GetLocalizedMessage("UpdateFailed", lan)));
         }
-
 
         [HttpGet("GetUser")]
         public IActionResult getUser(string userId,string lan= "en")
