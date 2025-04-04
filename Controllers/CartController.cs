@@ -1,14 +1,18 @@
-﻿namespace Shoes_Ecommerce.Controllers
+﻿using System.Threading.Tasks;
+
+namespace Shoes_Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CartController : ControllerBase
     {
         private readonly ICartService cartService;
+        private readonly IProductService productService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService,IProductService productService)
         {
             this.cartService = cartService;
+            this.productService = productService;
         }
 
         [HttpPost("Add")]
@@ -31,6 +35,39 @@
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductRemovedFromCart", lan)));
         }
 
+        [HttpPut("UpdateQuantity")]
+        public async Task<IActionResult> UpdateQuantity(UpdateQuantityDTO updateQuantityDTO, string lan = "en")
+        {
+            if (updateQuantityDTO.quantity < 1)
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("InvalidQuantity", lan)));
+
+            Cart cart = await cartService.UpdateQuantity(updateQuantityDTO.productId, updateQuantityDTO.userId, updateQuantityDTO.quantity);
+            
+            if (cart != null)
+            {
+                var product = await productService.GetProductById(cart.productId);
+                
+                if (product == null)
+                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("ProductNotFound", lan)));
+
+                getProductsOfCart getProductsOfCart = new getProductsOfCart
+                {
+                    productId = product.Id,
+                    productNameEn = product.NameEn,
+                    productNameAr = product.NameAr,
+                    price = product.Price,
+                    quantity = cart.quantity,
+                    imageName = product.Images.ToList()[0].ImageUrl,
+                    productSizeName = cart.variant.Size.sizeName
+                };
+
+                var filteredProducts = EntityHelper.FilterEntitiesByLanguage(new List<getProductsOfCart> { getProductsOfCart }, lan);
+
+                return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductQuantityUpdated", lan), filteredProducts));
+            }
+
+            return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("NoCartItemsFound", lan)));
+        }
         [HttpGet("GetAll/{userId}")]
         public async Task<IActionResult> GetCarts(string userId, string lan = "en")
         {

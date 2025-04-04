@@ -14,6 +14,17 @@ namespace Shoes_Ecommerce.Repository
         }
         public async Task<IEnumerable<T>> GetAllAsync() => await dbSet.ToListAsync();
         public async Task<T> GetByIdAsync(dynamic id) => await dbSet.FindAsync(id);
+
+        public async Task<Product> GetProductByIdAsync(int id) 
+        {
+            return await context.Products
+                .Include(p => p.Variants)
+                    .ThenInclude(p => p.Color)
+                .Include(p => p.Variants)
+                    .ThenInclude(p => p.Size)
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
         public Category GetCategoryIncludeAllProducts(int id)
         {
             return context.Categories

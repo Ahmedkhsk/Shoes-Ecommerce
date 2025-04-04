@@ -104,6 +104,14 @@
 
             }
         }
+
+        public async Task<Product> GetProductById(int id)
+        {
+            var product = await productRepo.GetProductByIdAsync(id);
+            if (product == null)
+                throw new KeyNotFoundException("Product not found.");
+            return product;
+        }
         public IEnumerable<Product> GetAllProductsWithFilter(FilterDTO filterDTO)
         {
             var products = productRepo.getAllProductWithFilter(filterDTO);

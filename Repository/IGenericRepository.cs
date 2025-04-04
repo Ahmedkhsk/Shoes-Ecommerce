@@ -11,6 +11,7 @@
         public List<Product> GetProductsByUserID(string id);
         public List<Product> GetProductsByUserIDInCart(string id);
         public Task<T> GetByIdAsync(dynamic id);
+        public Task<Product> GetProductByIdAsync(int id);
         public Task Save();
     }
 }

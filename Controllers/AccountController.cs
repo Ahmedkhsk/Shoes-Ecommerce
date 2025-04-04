@@ -196,8 +196,14 @@
                     user.ImageUrl = cover;        
                 }
 
+                userDTO userDTO = new userDTO();
+
+                userDTO.userName = user.Name;
+                userDTO.email = user.Email;
+                userDTO.imageName = user.ImageUrl;
+
                 await userManager.UpdateAsync(user);
-                return Ok(new ApiResponse(true,LocalizationHelper.GetLocalizedMessage("ProfileUpdated", lan),user));
+                return Ok(new ApiResponse(true,LocalizationHelper.GetLocalizedMessage("ProfileUpdated", lan), userDTO));
             }
             return BadRequest(new ApiResponse(false,LocalizationHelper.GetLocalizedMessage("UpdateFailed", lan)));
         }

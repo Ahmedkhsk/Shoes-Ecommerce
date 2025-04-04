@@ -104,6 +104,11 @@
                 ["en"] = "No Products found.",
                 ["ar"] = "لم يتم العثور على أي منتجات."
             },
+            ["ProductNotFound"] = new()
+            {
+                ["en"] = "Product Not Found.",
+                ["ar"] = "لم يتم العثور على المنتج."
+            },
             ["ProductsRetrieved"] = new()
             {
                 ["en"] = "Products retrieved successfully.",
@@ -190,6 +195,21 @@
             {
                 ["en"] = "User retrived successfully.",
                 ["ar"] = "تم استرجاع المستخدم بنجاح."
+            },
+            ["UserNotFound"] = new()
+            {
+                ["en"] = "User not found.",
+                ["ar"] = "لم يتم العثور على المستخدم."
+            },
+            ["InvalidQuantity"] = new()
+            {
+                ["en"] = "Invalid quantity.",
+                ["ar"] = "كمية غير صالحة."
+            },
+            ["ProductQuantityUpdated"] = new()
+            {
+                ["en"] = "Product quantity updated successfully.",
+                ["ar"] = "تم تحديث كمية المنتج بنجاح."
             }
         };
 

@@ -89,6 +89,13 @@ namespace Shoes_Ecommerce.Services
             return getCartDTO;
         }
 
-    
+        public async Task<Cart> UpdateQuantity(int productId, string userId, int quantity)
+        {
+            var cart = cartRepo.GetAllAsync().Result.FirstOrDefault(f => f.userId == userId && f.productId == productId);
+            cart.quantity = quantity;
+            cartRepo.Update(cart);
+            await cartRepo.Save();
+            return cart;
+        }
     }
 }

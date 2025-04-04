@@ -7,6 +7,7 @@ namespace Shoes_Ecommerce.Services
         public Task AddProductAsync(ProductDTO product);
         public IEnumerable<Product> GetAllProducts(int CategoryId);
         public IEnumerable<Product> GetAllProductsWithFilter(FilterDTO filterDTO);
+        public Task<Product> GetProductById(int id);
         Task UploadImagesAsync(int productId, List<IFormFile> images);
     }
 }
