@@ -65,7 +65,7 @@ namespace Shoes_Ecommerce.Services
         public async Task<GetCartDTO> GetCarts(string id)
         {
             GetCartDTO getCartDTO = new GetCartDTO();
-            double totalPrice = 0;
+            double subPrice = 0;
             List<Product> products = cartRepo.GetProductsByUserIDInCart(id);
             List<getProductsOfCart> productsOfCarts = new List<getProductsOfCart>();
             foreach (var product in products)
@@ -82,10 +82,12 @@ namespace Shoes_Ecommerce.Services
                     imageName = product.Images.ToList()[0].ImageUrl,
                     productSizeName = variant.Size.sizeName
                 });
-                totalPrice += product.Price * cart.quantity;
+                subPrice += product.Price * cart.quantity;
             }
             getCartDTO.products = productsOfCarts;
-            getCartDTO.totalPrice = totalPrice;
+            getCartDTO.subPrice = subPrice;
+            getCartDTO.totalPrice = subPrice + getCartDTO.shoppingPrice;
+
             return getCartDTO;
         }
 

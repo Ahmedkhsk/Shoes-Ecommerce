@@ -7,12 +7,10 @@ namespace Shoes_Ecommerce.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService cartService;
-        private readonly IProductService productService;
 
-        public CartController(ICartService cartService,IProductService productService)
+        public CartController(ICartService cartService)
         {
             this.cartService = cartService;
-            this.productService = productService;
         }
 
         [HttpPost("Add")]
@@ -41,33 +39,25 @@ namespace Shoes_Ecommerce.Controllers
             if (updateQuantityDTO.quantity < 1)
                 return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("InvalidQuantity", lan)));
 
-            Cart cart = await cartService.UpdateQuantity(updateQuantityDTO.productId, updateQuantityDTO.userId, updateQuantityDTO.quantity);
+            Cart cartofProduct = await cartService.UpdateQuantity(updateQuantityDTO.productId, updateQuantityDTO.userId, updateQuantityDTO.quantity);
             
-            if (cart != null)
+            if (cartofProduct != null)
             {
-                var product = await productService.GetProductById(cart.productId);
-                
-                if (product == null)
-                    return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("ProductNotFound", lan)));
+                GetCartDTO cartofProducts = await cartService.GetCarts(updateQuantityDTO.userId);
 
-                getProductsOfCart getProductsOfCart = new getProductsOfCart
+                var UpdateQuantity = new
                 {
-                    productId = product.Id,
-                    productNameEn = product.NameEn,
-                    productNameAr = product.NameAr,
-                    price = product.Price,
-                    quantity = cart.quantity,
-                    imageName = product.Images.ToList()[0].ImageUrl,
-                    productSizeName = cart.variant.Size.sizeName
+                    quantity = cartofProduct.quantity,
+                    subPrice = cartofProducts.subPrice,
+                    totalPrice = cartofProducts.totalPrice,
                 };
-
-                var filteredProducts = EntityHelper.FilterEntitiesByLanguage(new List<getProductsOfCart> { getProductsOfCart }, lan);
-
-                return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductQuantityUpdated", lan), filteredProducts));
+              
+                return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductQuantityUpdated", lan), UpdateQuantity));
             }
 
             return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("NoCartItemsFound", lan)));
         }
+        
         [HttpGet("GetAll/{userId}")]
         public async Task<IActionResult> GetCarts(string userId, string lan = "en")
         {
@@ -85,8 +75,11 @@ namespace Shoes_Ecommerce.Controllers
 
             filteredCart.products = filteredProducts;
             filteredCart.totalPrice = cart.totalPrice;
-  
+            filteredCart.subPrice = cart.subPrice;
+            filteredCart.shoppingPrice = cart.shoppingPrice;
+
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("CartItemsRetrieved", lan), filteredCart));
         }
+    
     }
 }
