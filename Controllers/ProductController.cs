@@ -1,4 +1,5 @@
 ﻿using Shoes_Ecommerce.DTO.ProductDTO;
+using Shoes_Ecommerce.Models;
 using Shoes_Ecommerce.Services;
 using System.Threading.Tasks;
 
@@ -41,7 +42,7 @@ namespace Shoes_Ecommerce.Controllers
         }
         
         [HttpGet("Filter")]
-        public ActionResult Filter([FromQuery]FilterDTO filterDTO, string lan = "en")
+        public IActionResult Filter([FromQuery]FilterDTO filterDTO, string lan = "en")
         {
             var Products = productService.GetAllProductsWithFilter(filterDTO);
             if (Products == null || !Products.Any())
@@ -51,9 +52,22 @@ namespace Shoes_Ecommerce.Controllers
 
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductsRetrieved", lan), filteredProducts));
         }
-        
+
+        [HttpGet("Search")]
+        public IActionResult Serach(string name ,string lan = "en")
+        {
+           var products = productService.GetProductsInSearch(name);
+
+            if(products == null || !products.Any())
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("NoProductsFound", lan), Enumerable.Empty<Product>()));
+           
+            var filteredProducts = EntityHelper.FilterEntitiesByLanguage(products, lan);
+
+            return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductsRetrieved", lan), filteredProducts));
+        }
+
         [HttpGet("GetAll/{categoryId}")]
-        public ActionResult GetAll(int categoryId, string lan = "en")
+        public IActionResult GetAll(int categoryId, string lan = "en")
         {
             var Products =  productService.GetAllProducts(categoryId);
             if (Products == null || !Products.Any())

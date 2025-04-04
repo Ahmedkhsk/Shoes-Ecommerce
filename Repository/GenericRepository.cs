@@ -102,7 +102,21 @@ namespace Shoes_Ecommerce.Repository
 
             return products;
         }
+        public List<Product> GetProductsInSearch(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return new List<Product>();
 
+            return context.Products
+                    .Include(p => p.Variants)
+                        .ThenInclude(p => p.Color)
+                    .Include(p => p.Variants)
+                        .ThenInclude(p => p.Size)
+                    .Include(p => p.Images)
+                    .Where(c => (c.NameEn ?? "").ToLower().Contains(name.ToLower()) ||
+                                (c.NameAr ?? "").ToLower().Contains(name.ToLower()))
+                    .ToList();
+        }
         public async Task AddAsync(T entity) => await dbSet.AddAsync(entity);
         public  void Update(T entity) =>  dbSet.Update(entity);
         public async Task DeleteAsync(dynamic id)
@@ -111,9 +125,8 @@ namespace Shoes_Ecommerce.Repository
             if (entity != null)
                 dbSet.Remove(entity);
         }
-      
         public async Task Save() => await context.SaveChangesAsync();
-        
+
 
     }
 }

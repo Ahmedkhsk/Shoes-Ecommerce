@@ -2,6 +2,7 @@
 {
     public class ProductService : IProductService
     {
+        #region proprity
         private readonly IGenericRepository<Product> productRepo;
         private readonly IGenericRepository<ProductColor> colorRepo;
         private readonly IGenericRepository<ProductSize> sizeRepo;
@@ -9,6 +10,9 @@
         private readonly IGenericRepository<Category> categoryRepo;
         private readonly IGenericRepository<ProductVariant> variantRepo;
         private readonly string ImagePath;
+        #endregion
+
+        #region Construtor
         public ProductService(
             IGenericRepository<Product> productRepo, IGenericRepository<ProductColor> colorRepo,
             IGenericRepository<ProductSize> sizeRepo, IGenericRepository<ProductImage> ImageRepo
@@ -24,7 +28,8 @@
             variantRepo = VariantRepo;
             ImagePath = Path.Combine(webHostEnvironment.WebRootPath, FileSetting.ImagesPathProduct.TrimStart('/'));
         }
-
+        #endregion
+      
         public async Task AddProductAsync(ProductDTO productDto)
         {
             Product product = new Product();
@@ -112,6 +117,7 @@
                 throw new KeyNotFoundException("Product not found.");
             return product;
         }
+      
         public IEnumerable<Product> GetAllProductsWithFilter(FilterDTO filterDTO)
         {
             var products = productRepo.getAllProductWithFilter(filterDTO);
@@ -119,6 +125,7 @@
                 return Enumerable.Empty<Product>();
             return products;
         }
+    
         public IEnumerable<Product> GetAllProducts(int CategoryId)
         {
             Category category = categoryRepo.GetCategoryIncludeAllProducts(CategoryId);
@@ -129,6 +136,9 @@
             return category.Products;
         }
 
-
+        public List<Product> GetProductsInSearch(string name)
+        {
+            return productRepo.GetProductsInSearch(name);
+        }
     }
 }

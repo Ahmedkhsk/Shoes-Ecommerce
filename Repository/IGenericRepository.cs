@@ -9,6 +9,7 @@
         public Category GetCategoryIncludeAllProducts(int id);
         public List<Product> getAllProductWithFilter(FilterDTO filterDTO);
         public List<Product> GetProductsByUserID(string id);
+        public List<Product> GetProductsInSearch(string name);
         public List<Product> GetProductsByUserIDInCart(string id);
         public Task<T> GetByIdAsync(dynamic id);
         public Task<Product> GetProductByIdAsync(int id);
