@@ -84,9 +84,24 @@
                 ["en"] = "Category added successfully.",
                 ["ar"] = "تم إضافة الفئة بنجاح."
             },
+            ["CategoryUpdatedSuccess"] = new()
+            {
+                ["en"] = "Category Updated Successfully.",
+                ["ar"] = "تم إضافة الفئة بنجاح."
+            },
+            ["CategoryDeletedSuccess"] = new()
+            {
+                ["en"] = "Category Deleted Successfully.",
+                ["ar"] = "تم إضافة الفئة بنجاح."
+            },
             ["NoCategoriesFound"] = new()
             {
                 ["en"] = "No categories found.",
+                ["ar"] = "لم يتم العثور على أي فئات."
+            },
+            ["CategoryNotFound"] = new()
+            {
+                ["en"] = "Category not Found.",
                 ["ar"] = "لم يتم العثور على أي فئات."
             },
             ["CategoriesRetrieved"] = new()
@@ -210,7 +225,53 @@
             {
                 ["en"] = "Product quantity updated successfully.",
                 ["ar"] = "تم تحديث كمية المنتج بنجاح."
+            },
+            ["ProductNotFoundInCart"] = new()
+            {
+                ["en"] = "Product not found in cart.",
+                ["ar"] = "لم يتم العثور على المنتج في السلة."
+            },
+            ["ProductQuantityUpdatedInCart"] = new()
+            {
+                ["en"] = "Product quantity updated in cart successfully.",
+                ["ar"] = "تم تحديث كمية المنتج في السلة بنجاح."
+            },
+            ["OrderNotFound"] = new()
+            {
+                ["en"] = "Order not found.",
+                ["ar"] = "لم يتم العثور على الطلب."
+            },
+            ["OrderStatusUpdated"] = new()
+            {
+                ["en"] = "Order status updated successfully.",
+                ["ar"] = "تم تحديث حالة الطلب بنجاح."
+            },
+            ["OrderDeleted"] = new()
+            {
+                ["en"] = "Order deleted successfully.",
+                ["ar"] = "تم حذف الطلب بنجاح."
+            },
+            ["OrderNotFoundInCart"] = new()
+            {
+                ["en"] = "Order not found in cart.",
+                ["ar"] = "لم يتم العثور على الطلب في السلة."
+            },
+            ["OrderStatusUpdatedInCart"] = new()
+            {
+                ["en"] = "Order status updated in cart successfully.",
+                ["ar"] = "تم تحديث حالة الطلب في السلة بنجاح."
+            },
+            ["ProductNotFoundInFavorites"] = new()
+            {
+                ["en"] = "Product not found in favorites.",
+                ["ar"] = "لم يتم العثور على المنتج في المفضلة."
+            },
+            ["ProductQuantityUpdatedInFavorites"] = new()
+            {
+                ["en"] = "Product quantity updated in favorites successfully.",
+                ["ar"] = "تم تحديث كمية المنتج في المفضلة بنجاح."
             }
+
         };
 
         public static string GetLocalizedMessage(string key, string lan)

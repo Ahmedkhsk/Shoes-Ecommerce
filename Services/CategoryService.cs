@@ -24,10 +24,46 @@
 
             await categoryRepo.Save();
         }
+        public async Task UpdateCategoryAsync(int id, CategoryDTO categoryFromDto)
+        {
+            Category categoryFormDb = await categoryRepo.GetByIdAsync(id);
+            categoryFormDb.NameEn = categoryFromDto.NameEn;
+            categoryFormDb.NameAr = categoryFromDto.NameAr;
+
+            if (categoryFromDto.ImageUrl != null)
+            {
+                var oldImagePath = categoryFormDb.ImageUrl;
+                string cover = await Images.SaveImage(categoryFromDto.ImageUrl, imagePath);
+                categoryFormDb.ImageUrl = cover;
+                Images.DeleteImage(oldImagePath, imagePath);
+            }
+
+            categoryRepo.Update(categoryFormDb);
+            await categoryRepo.Save();
+        }
+        public async Task DeleteCategoryAsync(int id)
+        {
+            Category categoryFormDb = await categoryRepo.GetByIdAsync(id);
+
+            var imageUrl = categoryFormDb.ImageUrl;
+            if (imageUrl != null)
+            {
+                Images.DeleteImage(imageUrl, imagePath);
+            }
+            await categoryRepo.DeleteAsync(id);
+            await categoryRepo.Save();
+        }
 
         public Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
             return categoryRepo.GetAllAsync();
         }
+
+        public async Task<Category> GetCategoryByIdAsync(int id)
+        {
+            return await categoryRepo.GetByIdAsync(id);
+        }
+
+
     }
 }
