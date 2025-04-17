@@ -9,6 +9,8 @@
         private readonly IGenericRepository<ProductImage> imageRepo;
         private readonly IGenericRepository<Category> categoryRepo;
         private readonly IGenericRepository<ProductVariant> variantRepo;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IGenericRepository<UserNotification> userNotificationRepo;
         private readonly string ImagePath;
         #endregion
 
@@ -17,8 +19,8 @@
             IGenericRepository<Product> productRepo, IGenericRepository<ProductColor> colorRepo,
             IGenericRepository<ProductSize> sizeRepo, IGenericRepository<ProductImage> ImageRepo
             , IWebHostEnvironment webHostEnvironment, IGenericRepository<Category> categoryRepo,
-            IGenericRepository<ProductVariant> VariantRepo
-                                )
+            IGenericRepository<ProductVariant> VariantRepo, UserManager<ApplicationUser> userManager
+            )
         {
             this.productRepo = productRepo;
             this.colorRepo = colorRepo;
@@ -26,6 +28,8 @@
             imageRepo = ImageRepo;
             this.categoryRepo = categoryRepo;
             variantRepo = VariantRepo;
+            this.userManager = userManager;
+            this.userNotificationRepo = userNotificationRepo;
             ImagePath = Path.Combine(webHostEnvironment.WebRootPath, FileSetting.ImagesPathProduct.TrimStart('/'));
         }
         #endregion
@@ -81,6 +85,9 @@
                 product.Variants.Add(productVariant);
 
             }
+
+            await SendNotificaciones.SendProductNotificationToTopic("all", "New Product!", $"A new product has been added: {product.NameEn}");
+
         }
 
         public async Task UploadImagesAsync(int productId, List<IFormFile> images)

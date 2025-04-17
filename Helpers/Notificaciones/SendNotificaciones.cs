@@ -2,35 +2,38 @@
 {
     public static class SendNotificaciones
     {
-        public static async Task SendNotificationAsync(string token, string title, string body)
+        public static async Task SendProductNotificationToTopic(string topic, string title, string body)
         {
-            var message = new Message()
+            var serverKey = "YOUR_FIREBASE_SERVER_KEY";
+            var client = new HttpClient();
+
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"key={serverKey}");
+
+            var message = new
             {
-                Token = token,
-                Notification = new Notification()
+                to = $"/topics/{topic}",
+                notification = new
                 {
-                    Title = title,
-                    Body = body
+                    title = title,
+                    body = body,
                 }
+                //data = new
+                //{
+                //    productId = product.Id.ToString(),
+                //    productName = product.NameEn,
+                //    productImage = product.Images,
+                //    productPrice = product.Price
+                //}
             };
 
-            var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
-            Console.WriteLine($"Notification sent successfully: {response}");
-        }
-        public static async Task SendMulticastNotificationAsync(List<string> tokens, string title, string body)
-        {
-            var message = new MulticastMessage()
-            {
-                Tokens = tokens,
-                Notification = new Notification()
-                {
-                    Title = title,
-                    Body = body
-                }
-            };
+            var jsonMessage = JsonConvert.SerializeObject(message);
+            var content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
 
-            var response = await FirebaseMessaging.DefaultInstance.SendEachForMulticastAsync(message);
-            Console.WriteLine($"Successfully sent {response.SuccessCount} messages");
+            var result = await client.PostAsync("https://fcm.googleapis.com/v1/projects/shoes-app-cdf3b/messages:send", content);
+
+            var response = await result.Content.ReadAsStringAsync();
+            Console.WriteLine($"Firebase Response: {response}");
         }
+
     }
 }

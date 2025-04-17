@@ -10,6 +10,7 @@
         public DbSet<ProductVariant> productVariant { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
         public Context(DbContextOptions<Context> options) : base(options){}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

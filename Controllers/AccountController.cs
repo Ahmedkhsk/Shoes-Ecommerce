@@ -144,7 +144,6 @@
                 var CheckPass = await userManager.CheckPasswordAsync(userExist, Model.password);
                 if (CheckPass)
                 {
-                    //userExist.deviceToken = Model.deviceToken;
                     await userManager.UpdateAsync(userExist);
 
                     List<Claim> Claims = new List<Claim>();

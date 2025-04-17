@@ -79,17 +79,8 @@ namespace Shoes_Ecommerce
             #endregion
 
             #region app
+
             var app = builder.Build();
-
-            var env = builder.Environment;
-            var config = builder.Configuration; 
-
-            var firebaseConfigPath = Path.Combine(env.ContentRootPath, config["Firebase:ConfigFilePath"]);
-
-            FirebaseApp.Create(new AppOptions()
-            {
-                Credential = GoogleCredential.FromFile(firebaseConfigPath)
-            });
 
             app.UseSwagger();
 
@@ -106,6 +97,7 @@ namespace Shoes_Ecommerce
             app.MapControllers();
 
             app.Run();
+
             #endregion
         }
     }

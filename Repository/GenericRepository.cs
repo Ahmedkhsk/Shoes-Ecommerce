@@ -117,6 +117,15 @@ namespace Shoes_Ecommerce.Repository
                                 (c.NameAr ?? "").ToLower().Contains(name.ToLower()))
                     .ToList();
         }
+
+        public async Task<List<UserNotification>> GetUserNotificationsAsync(string userId)
+        {
+            return await context.UserNotifications
+                .Where(n => n.userId == userId)
+                .OrderByDescending(n => n.CreatedAt)
+                .ToListAsync();
+        }
+
         public async Task AddAsync(T entity) => await dbSet.AddAsync(entity);
         public  void Update(T entity) =>  dbSet.Update(entity);
         public async Task DeleteAsync(dynamic id)
