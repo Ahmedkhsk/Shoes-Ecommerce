@@ -2,10 +2,10 @@
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IGenericRepository<Category> categoryRepo;
+        private readonly ICategoryRepository categoryRepo;
         private readonly string imagePath;
 
-        public CategoryService(IGenericRepository<Category> categoryRepo, IWebHostEnvironment webHostEnvironment)
+        public CategoryService(ICategoryRepository categoryRepo, IWebHostEnvironment webHostEnvironment)
         {
             this.categoryRepo = categoryRepo;
             imagePath = Path.Combine(webHostEnvironment.WebRootPath, FileSetting.ImagesPathCategory.TrimStart('/'));

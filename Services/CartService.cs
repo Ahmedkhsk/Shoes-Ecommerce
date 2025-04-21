@@ -5,12 +5,12 @@ namespace Shoes_Ecommerce.Services
 {
     public class CartService : ICartService
     {
-        private readonly IGenericRepository<Product> productRepo;
+        private readonly IProductRepository productRepo;
         private readonly IGenericRepository<ApplicationUser> userRepo;
         private readonly IGenericRepository<Cart> cartRepo;
         private readonly IGenericRepository<ProductVariant> variantRepo;
 
-        public CartService(IGenericRepository<Product> productRepo,
+        public CartService(IProductRepository productRepo,
             IGenericRepository<ApplicationUser> userRepo,
             IGenericRepository<Cart> cartRepo,
             IGenericRepository<ProductVariant> variantRepo)
@@ -66,7 +66,7 @@ namespace Shoes_Ecommerce.Services
         {
             GetCartDTO getCartDTO = new GetCartDTO();
             double subPrice = 0;
-            List<Product> products = cartRepo.GetProductsByUserIDInCart(id);
+            List<Product> products = productRepo.GetProductsByUserIDInCart(id);
             List<getProductsOfCart> productsOfCarts = new List<getProductsOfCart>();
             foreach (var product in products)
             {

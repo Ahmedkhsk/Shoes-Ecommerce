@@ -3,11 +3,11 @@
     public class ProductService : IProductService
     {
         #region proprity
-        private readonly IGenericRepository<Product> productRepo;
+        private readonly IProductRepository productRepo;
         private readonly IGenericRepository<ProductColor> colorRepo;
         private readonly IGenericRepository<ProductSize> sizeRepo;
         private readonly IGenericRepository<ProductImage> imageRepo;
-        private readonly IGenericRepository<Category> categoryRepo;
+        private readonly ICategoryRepository categoryRepo;
         private readonly IGenericRepository<ProductVariant> variantRepo;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IGenericRepository<UserNotification> userNotificationRepo;
@@ -16,9 +16,9 @@
 
         #region Construtor
         public ProductService(
-            IGenericRepository<Product> productRepo, IGenericRepository<ProductColor> colorRepo,
+            IProductRepository productRepo, IGenericRepository<ProductColor> colorRepo,
             IGenericRepository<ProductSize> sizeRepo, IGenericRepository<ProductImage> ImageRepo
-            , IWebHostEnvironment webHostEnvironment, IGenericRepository<Category> categoryRepo,
+            , IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepo,
             IGenericRepository<ProductVariant> VariantRepo, UserManager<ApplicationUser> userManager
             )
         {

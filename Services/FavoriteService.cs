@@ -2,11 +2,11 @@
 {
     public class FavoriteService : IFavoriteService
     {
-        private readonly IGenericRepository<Product> productRepo;
+        private readonly IProductRepository productRepo;
         private readonly IGenericRepository<ApplicationUser> userRepo;
         private readonly IGenericRepository<Favorite> favRepo;
 
-        public FavoriteService(IGenericRepository<Product> productRepo , 
+        public FavoriteService(IProductRepository productRepo , 
             IGenericRepository<ApplicationUser> userRepo ,
             IGenericRepository<Favorite> favRepo)
         {
@@ -39,7 +39,7 @@
 
         public List<Product> GetFavorites(string id)
         {
-            List<Product> products = favRepo.GetProductsByUserID(id);
+            List<Product> products = productRepo.GetProductsByUserIDInFavorite(id);
             return products;
         }
 
