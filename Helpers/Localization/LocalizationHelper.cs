@@ -114,6 +114,16 @@
                 ["en"] = "Product added successfully.",
                 ["ar"] = "تم إضافة المنتج بنجاح."
             },
+            ["ProductUpdatedSuccess"] = new()
+            {
+                ["en"] = "Product updated successfully.",
+                ["ar"] = "تم تحديث المنتج بنجاح."
+            },
+            ["ProductDeletedSuccess"] = new()
+            {
+                ["en"] = "Product deleted successfully.",
+                ["ar"] = "تم حذف المنتج بنجاح."
+            },
             ["NoProductsFound"] = new()
             {
                 ["en"] = "No Products found.",
@@ -153,6 +163,11 @@
             {
                 ["en"] = "Favorites retrieved successfully.",
                 ["ar"] = "تم استرجاع المفضلات بنجاح."
+            },
+            ["ProductUpdatedInFavorites"] = new()
+            {
+                ["en"] = "Favorite Updated successfully.",
+                ["ar"] = "تم تحديث المفضله بنجاح."
             },
             ["ProductAddedToCart"] = new()
             {
@@ -211,10 +226,16 @@
                 ["en"] = "User retrived successfully.",
                 ["ar"] = "تم استرجاع المستخدم بنجاح."
             },
+
             ["UserNotFound"] = new()
             {
                 ["en"] = "User not found.",
                 ["ar"] = "لم يتم العثور على المستخدم."
+            },
+            ["UserDeleted"] = new()
+            {
+                ["en"] = "User Deleted.",
+                ["ar"] = "تم حذف المستخدم."
             },
             ["InvalidQuantity"] = new()
             {
@@ -271,6 +292,7 @@
                 ["en"] = "Product quantity updated in favorites successfully.",
                 ["ar"] = "تم تحديث كمية المنتج في المفضلة بنجاح."
             }
+
 
         };
 

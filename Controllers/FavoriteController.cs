@@ -22,8 +22,16 @@ namespace Shoes_Ecommerce.Controllers
             await favoriteService.AddFavoriteAsync(favoriteDTO);
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductAddedToFavorites", lan)));
         }
+        [HttpPut("Update")]
+        public async Task<IActionResult> updatefavorite(FavoriteAddDTO favoriteDTO, string lan = "en")
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("InvalidRequest", lan)));
+            await favoriteService.UpdateFavoriteAsync(favoriteDTO);
+            return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductUpdatedInFavorites", lan)));
+        }
 
-        [HttpDelete("Remove")]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> removefavorite(FavoriteAddDTO favoriteDTO, string lan = "en")
         {
             if (!ModelState.IsValid)
@@ -32,6 +40,8 @@ namespace Shoes_Ecommerce.Controllers
             await favoriteService.RemoveFavoriteAsync(favoriteDTO);
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductRemovedFromFavorites", lan)));
         }
+
+
         
         [HttpGet("GetAll/{userId}")]
         public IActionResult getfavorites(string userId, string lan = "en")

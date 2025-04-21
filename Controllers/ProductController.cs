@@ -1,9 +1,4 @@
-﻿using Shoes_Ecommerce.DTO.ProductDTO;
-using Shoes_Ecommerce.Models;
-using Shoes_Ecommerce.Services;
-using System.Threading.Tasks;
-
-namespace Shoes_Ecommerce.Controllers
+﻿namespace Shoes_Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,7 +21,27 @@ namespace Shoes_Ecommerce.Controllers
 
             return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductAddedSuccess", lan)));
         }
+        [HttpPut("Update/{productId}")]
+        public async Task<IActionResult> UpdateProduct(int productId, ProductDTO productDTO, string lan = "en")
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("InvalidRequest", lan)));
+            var product = await productService.GetProductById(productId);
+            if (product == null)
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("ProductNotFound", lan)));
+            await productService.UpdateProductAsync(productId, productDTO);
+            return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductUpdatedSuccess", lan)));
+        }
 
+        [HttpDelete("Delete/{productId}")]
+        public async Task<IActionResult> DeleteProduct(int productId, string lan = "en")
+        {
+            var product = await productService.GetProductById(productId);
+            if (product == null)
+                return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("ProductNotFound", lan)));
+            await productService.DeleteProductAsync(productId);
+            return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("ProductDeletedSuccess", lan)));
+        }
         [HttpPost("UploadImages/{productId}")]
         public async Task<IActionResult> UploadImages(int productId, [FromForm] List<IFormFile> images, string lan = "en")
         {

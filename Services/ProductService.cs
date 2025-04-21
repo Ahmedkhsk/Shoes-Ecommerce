@@ -33,7 +33,7 @@
             ImagePath = Path.Combine(webHostEnvironment.WebRootPath, FileSetting.ImagesPathProduct.TrimStart('/'));
         }
         #endregion
-      
+
         public async Task AddProductAsync(ProductDTO productDto)
         {
             Product product = new Product();
@@ -90,6 +90,52 @@
 
         }
 
+        public async Task<Product> UpdateProductAsync(int productId, ProductDTO productDto)
+        {
+            var product = await productRepo.GetByIdAsync(productId);
+            if (product == null)
+                throw new KeyNotFoundException("Product not found.");
+            product.NameEn = productDto.NameEn;
+            product.NameAr = productDto.NameAr;
+            product.descriptionEn = productDto.descriptionEn;
+            product.descriptionAr = productDto.descriptionAr;
+            product.Price = productDto.Price;
+            product.discount = productDto.discount;
+            product.CategoryID = productDto.Category;
+            product.targetGender = productDto.targetGender;
+            product.Variants = productDto.ProductVariants.Select(v => new ProductVariant
+            {
+                Color = new ProductColor { hexCode = v.colorHexCode },
+                Size = new ProductSize
+                {
+                    SizeValue = v.sizeValue,
+                    sizeName = ProductSizeName.GetSizeName(v.sizeValue)
+                },
+                QuantityInStock = v.QuantityInStock
+            }).ToList();
+            productRepo.Update(product);
+            await productRepo.Save();
+            return product;
+        }
+        
+        public async Task DeleteProductAsync(int productId)
+        {
+            var product = await productRepo.GetByIdAsync(productId);
+            if (product == null)
+                throw new KeyNotFoundException("Product not found.");
+            if(product.Images != null)
+            {
+                foreach (var image in product.Images)
+                {
+                    Images.DeleteImage(image.ImageUrl, ImagePath);
+                    await imageRepo.DeleteAsync(image);
+                }
+            }
+            
+            await productRepo.DeleteAsync(productId);
+            await productRepo.Save();
+        }
+
         public async Task UploadImagesAsync(int productId, List<IFormFile> images)
         {
             if (images == null || !images.Any())
@@ -124,15 +170,15 @@
                 throw new KeyNotFoundException("Product not found.");
             return product;
         }
-      
+
         public IEnumerable<Product> GetAllProductsWithFilter(FilterDTO filterDTO)
         {
             var products = productRepo.getAllProductWithFilter(filterDTO);
-            if(products == null || !products.Any())
+            if (products == null || !products.Any())
                 return Enumerable.Empty<Product>();
             return products;
         }
-    
+
         public IEnumerable<Product> GetAllProducts(int CategoryId)
         {
             Category category = categoryRepo.GetCategoryIncludeAllProducts(CategoryId);
@@ -147,5 +193,7 @@
         {
             return productRepo.GetProductsInSearch(name);
         }
+
+    
     }
 }

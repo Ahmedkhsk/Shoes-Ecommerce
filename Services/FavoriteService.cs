@@ -36,13 +36,22 @@
                 }
             }
         }
-
-        public List<Product> GetFavorites(string id)
+        public async Task UpdateFavoriteAsync(FavoriteAddDTO favoriteDTO)
         {
-            List<Product> products = productRepo.GetProductsByUserIDInFavorite(id);
-            return products;
-        }
+            var user = await userRepo.GetByIdAsync(favoriteDTO.userId);
+            var product = await productRepo.GetByIdAsync(favoriteDTO.productId);
+            if (user != null && product != null)
+            {
+                var favorite = favRepo.GetAllAsync().Result.FirstOrDefault(f => f.userId == favoriteDTO.userId && f.productId == favoriteDTO.productId);
 
+                if (favorite != null)
+                {
+                    favorite.productId = favoriteDTO.productId;
+                    favRepo.Update(favorite);
+                    await favRepo.Save();
+                }
+            }
+        }
         public async Task RemoveFavoriteAsync(FavoriteAddDTO favoriteDTO)
         {
             var user = await userRepo.GetByIdAsync(favoriteDTO.userId);
@@ -58,6 +67,11 @@
                 await favRepo.Save();
             }
         }
-    
+        public List<Product> GetFavorites(string id)
+        {
+            List<Product> products = productRepo.GetProductsByUserIDInFavorite(id);
+            return products;
+        }
+
     }
 }

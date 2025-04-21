@@ -207,6 +207,20 @@
             return BadRequest(new ApiResponse(false,LocalizationHelper.GetLocalizedMessage("UpdateFailed", lan)));
         }
 
+        [HttpDelete("DeleteProfile/{userId}")]
+        public async Task<IActionResult> deleteProfile(string userId, string lan = "en")
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                var image = user.ImageUrl;
+                Images.DeleteImage(image, imagePath);
+                await userManager.DeleteAsync(user);
+                return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("UserDeleted", lan)));
+            }
+            return BadRequest(new ApiResponse(false, LocalizationHelper.GetLocalizedMessage("UserNotFound", lan)));
+        }
+
         [HttpGet("GetUser")]
         public IActionResult getUser(string userId,string lan= "en")
         {
