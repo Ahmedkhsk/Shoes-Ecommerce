@@ -17,6 +17,7 @@ namespace Shoes_Ecommerce
             builder.Services.AddScoped<IFavoriteService, FavoriteService>();
             builder.Services.AddScoped<ICartService, CartService>();
 
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
 
             builder.Services.Configure<FormOptions>(options =>
             {
