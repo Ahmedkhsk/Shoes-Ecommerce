@@ -7,13 +7,15 @@
         private UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configure;
         private readonly string imagePath;
+        private readonly EmailSenderHelper _emailSender;
 
         public AccountController(UserManager<ApplicationUser> userManager , IConfiguration configure,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment, EmailSenderHelper emailSender)
         {
             this.userManager = userManager;
             this.configure = configure;
             imagePath = Path.Combine(webHostEnvironment.WebRootPath, FileSetting.ImagesPathUser.TrimStart('/'));
+            _emailSender = emailSender;
         }
             
         [HttpPost("Register")]
@@ -53,8 +55,11 @@
 
             if (result.Succeeded)
             {
-                var emailSender = new EmailSenderHelper();
-                await emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your OTP is: <b>{user.verificationCode}</b>");
+                await _emailSender.SendEmailAsync(
+                       user.Email,
+                       "Verification Code",
+                       $"Your OTP is: <b>{user.verificationCode}</b>"
+                   );
                 return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("RegistrationSuccess", lan), Model));
             }
                 
@@ -92,8 +97,7 @@
                 userExist.verificationCode = new Random().Next(1000, 9999).ToString();
                 userExist.IsApprove = false;
                 await userManager.UpdateAsync(userExist);
-                var emailSender = new EmailSenderHelper();
-                await emailSender.SendEmailAsync(email, "Verification Code", $"Your OTP is: <b>{userExist.verificationCode}</b>");
+                await _emailSender.SendEmailAsync(email, "Verification Code", $"Your OTP is: <b>{userExist.verificationCode}</b>");
                 return Ok(new ApiResponse(true, LocalizationHelper.GetLocalizedMessage("OTPSend", lan)));
             }
 

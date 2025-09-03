@@ -16,6 +16,7 @@ namespace Shoes_Ecommerce
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IFavoriteService, FavoriteService>();
             builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddTransient<EmailSenderHelper>();
 
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
 
