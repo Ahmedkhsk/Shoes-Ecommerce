@@ -18,6 +18,7 @@ namespace Shoes_Ecommerce.Helpers.EmailSender
                 Port = _emailSettings.Port,
                 Credentials = new NetworkCredential(_emailSettings.EmailFrom, _emailSettings.Password),
                 EnableSsl = true,
+                UseDefaultCredentials = false
             };
 
             var mailMessage = new MailMessage
