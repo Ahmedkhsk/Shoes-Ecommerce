@@ -2,10 +2,10 @@
 {
     public class EmailSenderHelper
     {
-        private readonly string _smtpServer = "smtp.gmail.com";
-        private readonly int _port = 587;
-        private readonly string _emailFrom = "mrahmedkhaled2004@gmail.com";
-        private readonly string _password = "sixk nioe wqph disv";
+        private readonly string _smtpServer = "";
+        private readonly int _port = 0;
+        private readonly string _emailFrom = "";
+        private readonly string _password = "";
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {

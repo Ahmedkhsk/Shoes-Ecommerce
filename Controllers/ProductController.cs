@@ -82,7 +82,7 @@
         }
 
         [HttpGet("GetAll/{categoryId}")]
-        public IActionResult GetAll(int categoryId, string lan = "en")
+        public IActionResult GetAll(int categoryId, int pageNumber, string lan = "en")
         {
             var Products =  productService.GetAllProducts(categoryId);
             if (Products == null || !Products.Any())

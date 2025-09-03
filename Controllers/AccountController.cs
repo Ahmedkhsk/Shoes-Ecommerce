@@ -15,7 +15,7 @@
             this.configure = configure;
             imagePath = Path.Combine(webHostEnvironment.WebRootPath, FileSetting.ImagesPathUser.TrimStart('/'));
         }
-
+            
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDTO Model, string lan = "en")
         {
